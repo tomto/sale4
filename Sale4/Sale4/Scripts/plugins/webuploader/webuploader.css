@@ -1,0 +1,62 @@
+.webuploader-container {
+	position: relative;
+}
+.webuploader-element-invisible {
+	position: absolute !important;
+	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px,1px,1px,1px);
+}
+.webuploader-pick {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	background: #00b7ee;
+	/*padding: 10px 15px;*/
+	color: #fff;
+	text-align: center;
+	border-radius: 3px;
+	overflow: hidden;
+}
+.webuploader-pick-hover {
+	background: #00a2d4;
+}
+
+.webuploader-pick-disable {
+	opacity: 0.6;
+	pointer-events:none;
+}
+
+
+ .uploader-list{
+     width: 400px;
+     min-height: 200px;
+     background-color: #FFFFFF;
+    background-image: url("/Content/assets/global/img/uploadimage.png");
+    background-origin: padding-box;
+    background-position-x: center;
+    background-position-y: 50%;
+    background-repeat: no-repeat;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-bottom-color: #e6e6e6;
+    border-bottom-style: dashed;
+    border-bottom-width: 3px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color: #e6e6e6;
+    border-left-style: dashed;
+    border-left-width: 3px;
+    border-right-color: #e6e6e6;
+    border-right-style: dashed;
+    border-right-width: 3px;
+    border-top-color: #e6e6e6;
+    border-top-style: dashed;
+    border-top-width: 3px;
+}
+.uploader-list .item{position:relative;}
+.uploader-list .item i{position: absolute;top: 0px;right: 0px;cursor: pointer;}

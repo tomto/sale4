@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="~/Content/UploadFile/images/zy0328ba01s.jpg" rel="shortcut icon">
+    <title>sale</title>
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Styles.Render("~/Content/font-awesome.min.css")
+    @Styles.Render("~/Content/flat-ui.css")
+
+    @RenderSection("styles", required: false)
+    @Scripts.Render("~/Scripts/angular/angular.js")
+</head>
+
+<body>
+    <div class="col-xs-12">
+            <nav role="navigation" class="navbar navbar-default navbar-lg">
+                <div class="navbar-header">
+                    <button data-target="#navbar-collapse-01" data-toggle="collapse" class="navbar-toggle" type="button">
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+                    <a href="#" class="navbar-brand">sale 4.0</a>
+                </div>
+                <div id="navbar-collapse-01" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        @*<li><a href="#fakelink">Menu Item<span class="navbar-unread">1</span></a></li>*@
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">专题活动管理 <b class="caret"></b></a>
+                            <span class="dropdown-arrow"></span>
+                            <ul class="dropdown-menu">
+                                <li><a href="/actIndex">活动列表</a></li>
+                                <li><a href="/actDetail#/Add">新增活动</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    <div class="container">
+        <div class="row"></div>
+        @RenderBody()
+    </div>
+    <footer>
+            <nav role="navigation" class="navbar navbar-default navbar-lg">
+                <div class="navbar-header">
+
+                </div>
+            </nav>
+        </footer>
+    @Scripts.Render("~/Scripts/jquery-1.10.2.min.js")
+    @Scripts.Render("~/Scripts/plugins/jquery.bootstrap/jquery.bootstrap.min.js")
+    @Scripts.Render("~/Scripts/plugins/validate/jquery.validate.min.js")
+    @Scripts.Render("~/Scripts/plugins/validate/validate.extend.js")
+    @Scripts.Render("~/Scripts/ajax.client.js")
+    @Scripts.Render("~/Scripts/flat-ui.js")
+    @Scripts.Render("~/Scripts/Model/ActivtiyModel.js")
+    @Scripts.Render("~/Scripts/angular/angular-route.js")
+    @Scripts.Render("~/Scripts/angular/API/saleService.js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

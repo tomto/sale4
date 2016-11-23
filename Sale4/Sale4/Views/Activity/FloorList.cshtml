@@ -1,0 +1,37 @@
+﻿
+
+
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        活动专题列表
+    </div>
+    <div class="panel-body">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>楼层名称</th>
+                        <th>楼层类型</th>
+                        <th>排序</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in floorsData">
+                        <td ng-bind="$index + 1"></td>
+                        <td ng-bind="x.Name"></td>
+                        <td ng-bind="x.DetailType == eDetailType.Html ? '图片' : x.DetailType == eDetailType.SideBar ? '侧边栏' : x.DetailType == eDetailType.ProCode ?  '优惠代码' : x.DetailType == eDetailType.List4 ?  '列表4'  : x.DetailType == eDetailType.List3 ?  '列表3':'列表2' "></td>
+                        <td ng-bind="x.Sort"></td>
+                        <td ng-bind="x.REC_CreateTime"></td>
+                        <td>
+                            <a ng-href="actDetail#/Floor/Edit/{{x.StaticHtmlId}}/{{x.StaticDetailId}}">编辑</a>
+                            <a ng-click="delFloor(x.StaticDetailId)" href="javascript:void(0)">删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+</div>

@@ -1,0 +1,134 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" Description="" ResponseEncoding="UTF-8" %>
+
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="The table to use for this sample." %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Assembly Name="System.Data" %>
+<%@ Import Namespace="System.Data" %>
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+
+namespace YGWeb.Model
+{
+    public class Model_<%=this.SourceTable.Name %>
+    {
+		<% foreach (ColumnSchema column in this.SourceTable.Columns) { %>
+		private <%=ToType(column)%> _<%=ToLowercase(column.Name)%>;
+		<%}%>
+		
+		public Model_<%=this.SourceTable.Name %>(){}
+		
+		 
+		<% foreach (ColumnSchema column in this.SourceTable.Columns) { %>
+		/// <summary>
+        /// Description:<%=column.Description%>  
+        /// </summary>
+		public <%=ToType(column)%> <%=column.Name%>
+		{
+			get{ return this._<%=ToLowercase(column.Name)%>;}
+			set{ this._<%=ToLowercase(column.Name)%> = value;}
+		}
+		<%}%>
+    }
+}
+
+<script runat="template">
+
+    public string ToColumnColl(ColumnSchemaCollection colColl)
+    {
+        string strCol = "";
+        foreach (ColumnSchema column in colColl)
+        {
+           strCol = strCol+"\""+column.Name+"\""+",";
+        }
+        return strCol.TrimEnd(',');
+        
+    }
+	public string ToLowercase(string str)
+	{
+		str = str.ToLower();	
+		return str;
+	}
+	
+	public string ToType(ColumnSchema column)
+	{
+		if (column.Name.EndsWith("TypeCode")) return column.Name;
+		
+		switch (column.DataType)
+		{
+			case DbType.AnsiString: return "string";
+			case DbType.AnsiStringFixedLength: return "string";
+			case DbType.Binary: return "byte[]";
+			case DbType.Boolean: return "bool";
+			case DbType.Byte: return "byte";
+			case DbType.Currency: return "decimal";
+			case DbType.Date: return "DateTime";
+			case DbType.DateTime: return "DateTime";
+			case DbType.Decimal: return "decimal";
+			case DbType.Double: return "double";
+			case DbType.Guid: return "Guid";
+			case DbType.Int16: return "short";
+			case DbType.Int32: return "int";
+			case DbType.Int64: return "long";
+			case DbType.Object: return "object";
+			case DbType.SByte: return "byte[]";
+			case DbType.Single: return "float";
+			case DbType.String: return "string";
+			case DbType.StringFixedLength: return "string";
+			case DbType.Time: return "TimeSpan";
+			case DbType.UInt16: return "ushort";
+			case DbType.UInt32: return "uint";
+			case DbType.UInt64: return "ulong";
+			case DbType.VarNumeric: return "decimal";
+			default:
+			{
+				return "__UNKNOWN__" + column.NativeType;
+			}
+		}
+	}
+	
+	public string GetConstructorParameters()
+	{
+		string ret = "";
+		foreach(ColumnSchema column in SourceTable.Columns)
+		{
+			ret += ToType(column) + " " + ToLowercase(column.Name) + ",\n\t\t\t";
+		}
+		return ret.Substring(0, ret.Length - 5);
+	}
+	public string ToTypeConvert(ColumnSchema column,string strValue)
+	{
+		if (column.Name.EndsWith("TypeCode")) return column.Name;
+		
+		switch (column.DataType)
+		{
+			case DbType.AnsiString: return strValue+";";
+			case DbType.AnsiStringFixedLength: return strValue+";";
+			case DbType.Binary: return "Convert.ToByte("+strValue+");";
+			case DbType.Boolean: return "Convert.ToBoolean("+strValue+");";
+			case DbType.Byte: return "Convert.ToByte("+strValue+");";
+			case DbType.Currency: return "Convert.ToDecimal("+strValue+");";
+			case DbType.Date: return "Convert.ToDateTime("+strValue+");";
+			case DbType.DateTime: return "Convert.ToDateTime("+strValue+");";
+			case DbType.Decimal: return "Convert.ToDecimal("+strValue+");";
+			case DbType.Double: return "Convert.ToDouble("+strValue+");";
+			case DbType.Int16: return "Convert.ToInt16("+strValue+");";
+			case DbType.Int32: return "Convert.ToInt32("+strValue+");";
+			case DbType.Int64: return "Convert.ToInt64("+strValue+");";
+			case DbType.Single: return "Convert.ToSingle("+strValue+");";
+			case DbType.String: return strValue+";";
+			case DbType.StringFixedLength: return strValue+";";
+			case DbType.Time: return "new TimeSpan(Convert.ToDateTime("+strValue+").Ticks);";
+			case DbType.VarNumeric: return "Convert.ToDecimal("+strValue+");";
+			case DbType.Guid: return "new Guid("+strValue+");";
+			default:
+			{
+				 return strValue+";";
+			}
+		}
+	}
+	
+</script>
+

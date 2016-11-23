@@ -1,0 +1,104 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" Description="" ResponseEncoding="UTF-8" %>
+
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="The table to use for this sample." %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Assembly Name="System.Data" %>
+<%@ Import Namespace="System.Data" %>
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+
+namespace YGWeb.BLL
+{
+    public class BLL_<%=this.SourceTable.Name %>
+    {
+        readonly DAL_<%=this.SourceTable.Name %> _dal<%=this.SourceTable.Name %> =new DAL_<%=this.SourceTable.Name %>();
+        IDbConnection conn = new SqlConnection(connString);
+        
+        /// <summary>
+        /// 查询
+        /// </summary>
+        public JnsFramework.Query.ISqlQuery Query
+        {
+            get { return _dal<%=this.SourceTable.Name %>.Query; }
+        }
+
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="htValue">值</param>
+        /// <param name="builder">条件</param>
+        /// <returns></returns>
+        public int Update(Hashtable htValue,JnsFramework.Condition.ConditionBuilder builder)
+        {
+            return _dal<%=this.SourceTable.Name %>.Update(htValue, builder);
+        }
+
+        /// <summary>
+        /// 插入
+        /// </summary>
+        /// <param name="htValue">值</param>
+        /// <returns></returns>
+        public int Insert(Hashtable htValue)
+        {
+            return _dal<%=this.SourceTable.Name %>.Insert(htValue);
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="builder">条件</param>
+        /// <returns></returns>
+        public int Delete(JnsFramework.Condition.ConditionBuilder builder)
+        {
+            return _dal<%=this.SourceTable.Name %>.Delete( builder);
+        }
+
+		
+    }
+}
+
+<script runat="template">
+	public string ToLowercase(string str)
+	{
+		str = str.ToLower();	
+		return str;
+	}
+	
+	public string ToTypeConvert(ColumnSchema column,string strValue)
+	{
+		if (column.Name.EndsWith("TypeCode")) return column.Name;
+		
+		switch (column.DataType)
+		{
+			case DbType.AnsiString: return strValue+";";
+			case DbType.AnsiStringFixedLength: return strValue+";";
+			case DbType.Binary: return "Convert.ToByte("+strValue+");";
+			case DbType.Boolean: return "Convert.ToBoolean("+strValue+");";
+			case DbType.Byte: return "Convert.ToByte("+strValue+");";
+			case DbType.Currency: return "Convert.ToDecimal("+strValue+");";
+			case DbType.Date: return "Convert.ToDateTime("+strValue+");";
+			case DbType.DateTime: return "Convert.ToDateTime("+strValue+");";
+			case DbType.Decimal: return "Convert.ToDecimal("+strValue+");";
+			case DbType.Double: return "Convert.ToDouble("+strValue+");";
+			case DbType.Int16: return "Convert.ToInt16("+strValue+");";
+			case DbType.Int32: return "Convert.ToInt32("+strValue+");";
+			case DbType.Int64: return "Convert.ToInt64("+strValue+");";
+			case DbType.Single: return "Convert.ToSingle("+strValue+");";
+			case DbType.String: return strValue+";";
+			case DbType.StringFixedLength: return strValue+";";
+			case DbType.Time: return "Convert.ToDateTime("+strValue+");";
+			case DbType.VarNumeric: return "Convert.ToDecimal("+strValue+");";
+			case DbType.Guid: return "new Guid("+strValue+");";
+			default:
+			{
+				 return strValue+";";
+			}
+		}
+	}
+	
+	
+</script>
+

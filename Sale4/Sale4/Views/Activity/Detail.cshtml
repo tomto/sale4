@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "DetailContent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@section styles{
+    @Styles.Render("~/Scripts/plugins/datetimepicker/bootstrap-datetimepicker.min.css")
+    @Styles.Render("~/Scripts/plugins/color/color-picker.css")
+    @Styles.Render("~/Scripts/plugins/webuploader/webuploader.css")
+}
+
+
+
+
+<div class="row">
+    <div ng-app="mainApp">
+        <div ng-view class="view-frame"></div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+
+    @Scripts.Render("~/Scripts/plugins/datetimepicker/bootstrap-datetimepicker.js")
+    @Scripts.Render("~/Scripts/plugins/datetimepicker/bootstrap-datetimepicker.zh-CN.js")
+    @Scripts.Render("~/Scripts/plugins/color/color-picker.js")
+    @Scripts.Render("~/Scripts/plugins/webuploader/webuploader.js")
+
+
+    @Scripts.Render("~/Scripts/angular/Moudle/angular.datetime.js")
+    @Scripts.Render("~/Scripts/angular/Moudle/angular.tagsinput.js")
+    @Scripts.Render("~/Scripts/angular/Moudle/angular.hjcanvas.js")
+    @Scripts.Render("~/Scripts/angular/Moudle/angular.fileload.js")
+    @Scripts.Render("~/Scripts/angular/Moudle/angular.textcanvas.js")
+    @Scripts.Render("~/Scripts/angular/Moudle/angular.colorpicker.js")
+
+    @Scripts.Render("~/Scripts/angular/Activity/detail.js")
+}

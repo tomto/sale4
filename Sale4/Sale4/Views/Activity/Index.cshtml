@@ -1,0 +1,71 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row" ng-app="mainApp" ng-controller="indexCtrl">
+    <div class="j_navbar-wrapper">
+        <div class="col-md-12">
+            <span class="alert-success" role="alert">未开始</span>
+            <span class="alert-info" role="alert">进行中</span>
+            <span class="alert-warning" role="alert">已结束</span>
+            <span class="bg-primary">总记录条数:<span ng-bind="pageData.allCount"></span></span>
+        </div>
+    </div>
+    <table class="table table-hover table-condensed">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>编号</th>
+                <th>名称</th>
+                <th>开始结束时间</th>
+                <th>创建人</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="x in fmStaticHtml" ng-class="timeStyle(x.ExpiresState)">
+                <td ng-bind="$index + 1"></td>
+                <td ng-bind="x.HtmlCode"></td>
+                <td ng-bind="x.HtmlName"></td>
+                <td ng-bind="timeText(x.StartTime,x.EndTime,x.ExpiresState)"></td>
+                <td ng-bind="x.REC_CreateBy"></td>
+                <td>
+                    <div class="btn-group btn-group-xs">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">操作 <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a ng-href="actDetail#/Edit/{{x.StaticHtmlId}}">编辑</a></li>
+                            <li><a ng-click="del(x.StaticHtmlId)" href="javascript:void(0)">删除</a></li>
+                            <li><a ng-click="copy(x.HtmlCode)" href="javascript:void(0)">复制</a></li>
+                            <li class="divider"></li>
+                            <li><a ng-href="{{x.PreUrl}}" target="_blank">预览</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-xs-12">
+            <a class="btn btn-block btn-lg " ng-click="applyIndex()" ng-class="{'btn-default':pageData.Index >= pageData.pageCount,'btn-primary':pageData.Index < pageData.pageCount}">加载更多</a>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    @Scripts.Render("~/Scripts/angular/Activity/index.js")
+    @Scripts.Render("~/Scripts/plugins/stickUp/stickUp.js")
+    @Scripts.Render("~/Scripts/plugins/webuploader/webuploader.js")
+    <script type="text/javascript">
+        $(function () {
+            $(document).ready(function () {
+                $('.j_navbar-wrapper').stickUp();
+            });
+        });
+    </script>
+}
+

@@ -1,0 +1,97 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<div ng-controller="floorCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    楼层详情
+                </div>
+                <div class="panel-body">
+                    <div class="btn-group">
+                        <a href="javascript:void(0);" ng-click="SelectDetailType(eDetailType.Html)" class="btn btn-primary" ng-class="{'active' : fmStaticDetail.DetailType == eDetailType.Html}"><span class="fui-photo">图片</span></a>
+                        <a href="javascript:void(0);" ng-click="SelectDetailType(eDetailType.List4)" class="btn btn-primary" ng-class="{'active' : fmStaticDetail.DetailType == eDetailType.List4}"><span class="fui-list">列表(每行4列)</span></a>
+                        <a href="javascript:void(0);" ng-click="SelectDetailType(eDetailType.List3)" class="btn btn-primary " ng-class="{'active' : fmStaticDetail.DetailType == eDetailType.List3}"><span class="fui-list">列表(每行3列)</span></a>
+                        <a href="javascript:void(0);" ng-click="SelectDetailType(eDetailType.List2)" class="btn btn-primary " ng-class="{'active' : fmStaticDetail.DetailType == eDetailType.List2}"><span class="fui-list">列表(每行2列)</span></a>
+                        <a href="javascript:void(0);" ng-click="SelectDetailType(eDetailType.ProCode)" class="btn btn-primary" ng-class="{'active' : fmStaticDetail.DetailType == eDetailType.ProCode}"><span class="fui-list-bulleted">优惠代码</span></a>
+                        <a href="javascript:void(0);" ng-click="SelectDetailType(eDetailType.SideBar)" class="btn btn-primary" ng-class="{'active' : fmStaticDetail.DetailType == eDetailType.SideBar}"><span class="fui-list-bulleted">侧边栏</span></a>
+                    </div>
+                    <div class="form-group">
+                        <label>楼层名称</label>
+                        <input type="text" class="form-control" ng-model="fmStaticDetail.Name">
+                    </div>
+                    <div class="form-group">
+                        <label>排序</label>
+                        <input type="number" class="form-control" ng-model="fmStaticDetail.Sort">
+                    </div>
+                    <!--列表-->
+                    <div ng-if="fmStaticDetail.DetailType == eDetailType.List4 || fmStaticDetail.DetailType == eDetailType.List3 || fmStaticDetail.DetailType == eDetailType.List2">
+                        <div class="form-group">
+                            <label>页面banner路径</label>
+                            <hjupload filemodel="fmStaticDetail.Title"></hjupload>
+                        </div>
+                        <div class="form-group">
+                            <label>楼层背景</label>
+                            <hjupload filemodel="fmStaticDetail.HtmlBackgroundUrl"></hjupload>
+                        </div>
+                        <div class="form-group">
+                            <label>商品code</label>
+                            <hjtagsinput tagmodel="fmStaticDetail.CommodityCodes" plac="code"></hjtagsinput>
+                        </div>
+                    </div>
+                    <!--侧边栏-->
+                    <div ng-if="fmStaticDetail.DetailType == eDetailType.SideBar">
+                        <div class="form-group">
+                            <label>楼层title</label>
+                            <hjupload filemodel="fmStaticDetail.Title"></hjupload>
+                        </div>
+                        <div class="form-group">
+                            <label>楼层背景</label>
+                            <hjupload filemodel="fmStaticDetail.HtmlBackgroundUrl"></hjupload>
+                        </div>
+                        <div class="form-group">
+                            <label>侧边栏code</label>
+                            <hjtagsinput tagmodel="fmStaticDetail.CommodityCodes" plac="1#一楼"></hjtagsinput>
+                        </div>
+                    </div>
+                    <!--图片-->
+                    <div ng-if="fmStaticDetail.DetailType == eDetailType.Html">
+                        <div class="form-group">
+                            <label>楼层背景</label>
+                            <hjupload filemodel="fmStaticDetail.Title"></hjupload>
+                        </div>
+                        <div class="form-group">
+                            <label>楼层图片</label>
+                            <hjupload filemodel="fmStaticDetail.HtmlBackgroundUrl"></hjupload>
+                        </div>
+                        <hjcanvas imgmodel="{{fmStaticDetail.HtmlBackgroundUrl}}" anchormodel="floorAnchors"></hjcanvas>
+                    </div>
+                    <!--优惠代码-->
+                    <div ng-if="fmStaticDetail.DetailType == eDetailType.ProCode">
+                        <div class="form-group">
+                            <label>楼层背景</label>
+                            <hjupload filemodel="fmStaticDetail.Title"></hjupload>
+                        </div>
+                        <div class="form-group">
+                            <label>楼层图片</label>
+                            <hjupload filemodel="fmStaticDetail.HtmlBackgroundUrl"></hjupload>
+                        </div>
+                        <textcanvas imgmodel="{{fmStaticDetail.HtmlBackgroundUrl}}" procodemodel="floorProCode"></textcanvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+            <div class="col-xs-3">
+                <a class="btn btn-block btn-lg btn-primary" ng-href="actDetail#/Edit/{{fmStaticDetail.StaticHtmlId}}">返回详情</a>
+            </div>
+            <div class="col-xs-3">
+                <a class="btn btn-block btn-lg btn-inverse" href="javascript:void(0);" ng-click="submitFloor()">保存</a>
+            </div>
+    </div>
+</div>
