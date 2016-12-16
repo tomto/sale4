@@ -1,0 +1,40 @@
+﻿
+<div class="form-group" ng-mouseover="toolsState = true" ng-mouseleave="toolsState = false">
+    <div>
+        <canvas></canvas>
+        <div class="btn-toolbar">
+            <div class="btn-group">
+                <a href="javascript:void(0);" class="btn btn-primary" ng-click="fitcanvas()"><i class="fa-lg fui-play"></i></a>
+                <a href="javascript:void(0);" ng-disabled="true" class=" btn btn-primary" id="logxyz">0</a>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="panel panel-default" ng-repeat="x in anchormodel">
+            <div class="panel-body">
+                <div class="form-group ">
+                    <h6><span class="label label-default" ng-bind="$index + 1"></span>{{x.Coord}} </h6>
+                </div>
+                <div class="form-group ">
+                    <div class="col-md-3">
+                        <select class="form-control" ng-model="x.Type" ng-change="changePlaceholder(x)">
+                            <option value="0">链接</option>
+                            <option value="1">加入购物车</option>
+                            <option value="2">加入多份/组合优惠</option>
+                            <option value="3">锚点</option>
+                            <option value="4">领取优惠券</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <input class="form-control" placeholder="{{x.Placeholder}}" ng-model="x.Operate" />
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-primary" ng-click="delAnchor($index)" title="删除">
+                            <i class="fui-cross"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

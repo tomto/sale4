@@ -7,7 +7,7 @@ var mainApp = angular.module("mainApp", ["ngRoute", "activityService"]);
 
 mainApp.controller("indexCtrl", function ($scope, activityService) {
     $scope.norepeat = true;
-    $scope.ActivityBase = new fmModel.ActivityBase();
+    $scope.fmStaticHtml = new fmModel.fmStaticHtml();
     $scope.pageData = {
         pageSize: 20,
         Index: 1,
@@ -21,7 +21,7 @@ mainApp.controller("indexCtrl", function ($scope, activityService) {
             $scope.pageData.Index = 1;
             $scope.pageData.pageSize = 20;
             activityService.GetStaticsPage($scope.pageData.pageSize , $scope.pageData.Index, function (result) {
-                $scope.ActivityBase = result.data;
+                $scope.fmStaticHtml = result.data;
                 $scope.pageData.pageCount = result.pageCount;
                 $scope.pageData.allCount = result.allCount;
                 $scope.norepeat = true;
@@ -34,7 +34,7 @@ mainApp.controller("indexCtrl", function ($scope, activityService) {
             $scope.norepeat = false;
             $scope.pageData.Index++;
             activityService.GetStaticsPage($scope.pageData.pageSize, $scope.pageData.Index, function (result) {
-                $scope.ActivityBase = $scope.ActivityBase.concat(result.data);
+                $scope.fmStaticHtml = $scope.fmStaticHtml.concat(result.data);
                 $scope.norepeat = true;
             });
         };
@@ -69,7 +69,7 @@ mainApp.controller("indexCtrl", function ($scope, activityService) {
     $scope.timeText = function (startTime, endTime, expiresState) {
         var result = startTime + "--" + endTime;
         if (expiresState == 0) {
-            result = "未发布";
+            result = "手动下架";
         }
         return result;
     };

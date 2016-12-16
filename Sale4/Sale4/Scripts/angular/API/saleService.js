@@ -49,7 +49,7 @@ activityService.factory("activityService", ['$http', function ($http) {
     var factory = {};
 
     factory.GetStatics = function (call, faid) {
-        saleService.then($http, "/ActivityApi/GetStatics", "", call, faid);
+        saleService.then($http, "/ActivityApi/GetDetails", "", call, faid);
     };
     
     factory.GetStaticsPage = function (pagesize,index, call, faid) {

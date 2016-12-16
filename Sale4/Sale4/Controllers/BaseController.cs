@@ -1,9 +1,9 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Sale4.Controllers.API
+namespace Sale4.Controllers
 {
-    public class BaseApiController : Controller
+    public class BaseController : Controller
     {
         public bool IsLogin
         {
@@ -14,13 +14,13 @@ namespace Sale4.Controllers.API
         {
             get
             {
-                return Session["UserSession"] == null ? "" : Session["UserSession"].ToString();
+                return Session["UserSession"] == null ? "hujue" : Session["UserSession"].ToString();
             }
         }
 
         public JsonResult GetJsonResult(object data)
         {
-            return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
         
         protected override void OnActionExecuting(ActionExecutingContext filterContext)

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Sale4.Controllers.API;
+using Sale4.Controllers;
 
 namespace Sale.Controllers
 {
-    public class ActivityController : BaseApiController
+    public class ActivityController : BaseController
     {
         // GET: Activity
         public ActionResult Index()

@@ -29,7 +29,7 @@
             <tr ng-repeat="x in fmStaticHtml" ng-class="timeStyle(x.ExpiresState)">
                 <td ng-bind="$index + 1"></td>
                 <td ng-bind="x.HtmlCode"></td>
-                <td ng-bind="x.HtmlName"></td>
+                <td ><a ng-bind="x.HtmlName" ng-href="actDetail#/Edit/{{x.StaticHtmlId}}"></a></td>
                 <td ng-bind="timeText(x.StartTime,x.EndTime,x.ExpiresState)"></td>
                 <td ng-bind="x.REC_CreateBy"></td>
                 <td>

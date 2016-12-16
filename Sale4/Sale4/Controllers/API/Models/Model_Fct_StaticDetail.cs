@@ -1,54 +1,70 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 
-namespace Proxy
+namespace Sale4.Controllers.API.Models
 {
-    public class Model_Fct_ActivityFloor
+    public class Model_Fct_StaticDetail
     {
-		private Guid _activityfloorid;
-		private Guid _activityid;
-		private int _floortype;
+		private Guid _staticdetailid;
+		private Guid _statichtmlid;
+		private string _name;
+		private string _title;
+		private int _detailtype;
 		private int _sort;
-		private string _fontcolor;
-		private string _fontfocuscolor;
+		private string _htmlbackgroundurl;
+		private string _lucencyanchor;
+		private string _commoditycodes;
 		private int _disabled;
 		private DateTime _rec_createtime;
 		private string _rec_createby;
 		private DateTime _rec_modifytime;
 		private string _rec_modifyby;
-		private string _floorname;
+		private string _tag;
 		
-		public Model_Fct_ActivityFloor(){}
+		public Model_Fct_StaticDetail(){}
 		
 		 
 		/// <summary>
         /// Description:  
         /// </summary>
-		public Guid ActivityFloorId
+		public Guid StaticDetailId
 		{
-			get{ return this._activityfloorid;}
-			set{ this._activityfloorid = value;}
+			get{ return this._staticdetailid;}
+			set{ this._staticdetailid = value;}
 		}
 		/// <summary>
         /// Description:  
         /// </summary>
-		public Guid ActivityId
+		public Guid StaticHtmlId
 		{
-			get{ return this._activityid;}
-			set{ this._activityid = value;}
+			get{ return this._statichtmlid;}
+			set{ this._statichtmlid = value;}
 		}
 		/// <summary>
-        /// Description:楼层类型0:普通,1:banner,2:Special  
+        /// Description:  
         /// </summary>
-		public int FloorType
+		public string Name
 		{
-			get{ return this._floortype;}
-			set{ this._floortype = value;}
+			get{ return this._name;}
+			set{ this._name = value;}
 		}
 		/// <summary>
-        /// Description:楼层排序  
+        /// Description:  
+        /// </summary>
+		public string Title
+		{
+			get{ return this._title;}
+			set{ this._title = value;}
+		}
+		/// <summary>
+        /// Description:  
+        /// </summary>
+		public int DetailType
+		{
+			get{ return this._detailtype;}
+			set{ this._detailtype = value;}
+		}
+		/// <summary>
+        /// Description:  
         /// </summary>
 		public int Sort
 		{
@@ -58,18 +74,26 @@ namespace Proxy
 		/// <summary>
         /// Description:  
         /// </summary>
-		public string FontColor
+		public string HtmlBackgroundUrl
 		{
-			get{ return this._fontcolor;}
-			set{ this._fontcolor = value;}
+			get{ return this._htmlbackgroundurl;}
+			set{ this._htmlbackgroundurl = value;}
 		}
 		/// <summary>
         /// Description:  
         /// </summary>
-		public string FontFocusColor
+		public string LucencyAnchor
 		{
-			get{ return this._fontfocuscolor;}
-			set{ this._fontfocuscolor = value;}
+			get{ return this._lucencyanchor;}
+			set{ this._lucencyanchor = value;}
+		}
+		/// <summary>
+        /// Description:  
+        /// </summary>
+		public string CommodityCodes
+		{
+			get{ return this._commoditycodes;}
+			set{ this._commoditycodes = value;}
 		}
 		/// <summary>
         /// Description:  
@@ -114,10 +138,10 @@ namespace Proxy
 		/// <summary>
         /// Description:  
         /// </summary>
-		public string FloorName
+		public string Tag
 		{
-			get{ return this._floorname;}
-			set{ this._floorname = value;}
+			get{ return this._tag;}
+			set{ this._tag = value;}
 		}
     }
 }

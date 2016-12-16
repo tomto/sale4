@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -113,17 +117,35 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\API\ActivityApiController.cs" />
-    <Compile Include="Controllers\API\BaseApiController.cs" />
+    <Compile Include="Controllers\API\BaseConnection.cs" />
+    <Compile Include="Controllers\API\CallResult.cs" />
+    <Compile Include="Controllers\API\Models\Model_Fct_StaticDetail.cs" />
+    <Compile Include="Controllers\API\Models\Model_Fct_StaticHtml.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\Common\ConvertDtHelper.cs" />
     <Compile Include="Controllers\Common\SaleCommon.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ActivityBaseViewModels.cs" />
+    <Compile Include="Models\ActivityBaseViewModel.cs" />
+    <Compile Include="Models\ActivityDetailViewModel.cs" />
+    <Compile Include="Models\StaticDetailViewModel.cs" />
+    <Compile Include="Models\StaticHtmlViewModel.cs" />
+    <Compile Include="Models\CommodityViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\activity.css" />
+    <Content Include="images\image_null.png" />
+    <Content Include="images\logo-mask.png" />
+    <Content Include="images\sort_asc.png" />
+    <Content Include="images\sort_asc_disabled.png" />
+    <Content Include="images\sort_both.png" />
+    <Content Include="images\sort_desc.png" />
+    <Content Include="images\sort_desc_disabled.png" />
+    <Content Include="Moudle\ProCode.html" />
+    <Content Include="Moudle\PromSlice.html" />
     <Content Include="Scripts\plugins\datetimepicker\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -181,6 +203,9 @@
     <Content Include="fonts\lato\lato-regular.svg" />
     <Content Include="fonts\lato\lato-regular.ttf" />
     <Content Include="fonts\lato\lato-regular.woff" />
+    <Content Include="App_Data\codesmith_template\BllCs.cst" />
+    <Content Include="App_Data\codesmith_template\CreateAll.cst" />
+    <Content Include="App_Data\codesmith_template\ModelCs.cst" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\dataTables.bootstrap.min.js" />
     <Content Include="Scripts\flat-ui.js" />
@@ -242,7 +267,6 @@
     <Content Include="Views\Activity\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Content\UploadFile\file\" />
   </ItemGroup>
   <ItemGroup>
@@ -252,12 +276,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Proxy\Proxy.csproj">
-      <Project>{f3f2c0dd-0557-406a-99c8-02f79968643d}</Project>
-      <Name>Proxy</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

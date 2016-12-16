@@ -2,7 +2,7 @@
 
 namespace Sale4.Models
 {
-    public class ActivityBaseViewModels
+    public class ActivityBaseViewModel
     {
 
         public Guid ActivityId { get; set; }

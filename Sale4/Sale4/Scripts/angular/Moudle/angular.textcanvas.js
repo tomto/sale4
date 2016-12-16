@@ -122,6 +122,16 @@ angular.module("textcanvas", [])
                     scope.fitcanvas();
                 };
 
+                scope.addFontSize = function (idx) {
+                    scope.procodemodel[idx].FontSize++;
+                    scope.fitcanvas();
+                };
+
+                scope.minusFontSize = function (idx) {
+                    scope.procodemodel[idx].FontSize--;
+                    scope.fitcanvas();
+                };
+
                 scope.clickOnMyBody = function(x,y) {
                     $.each(scope.procodemodel,function(idx, val) {
                         if (x > val.CoordX && x < (val.CoordX + val.FontWidth) && y < val.CoordY && y > (val.CoordY - val.FontSize <= 0 ? 0 : val.CoordY - val.FontSize)) {

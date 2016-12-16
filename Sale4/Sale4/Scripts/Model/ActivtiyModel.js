@@ -3,44 +3,50 @@ var fmModel = {};
 
 
 (function (fmModel) {
-    var ActivityBase = (function () {
-        function ActivityBase() {
-            this.ActivityId = "";
-            this.ActivityCode = "";
-            this.ActivityName = "";
-            this.ActivityType = 0;
-            this.ActivityBgColor = "";
-            this.StartTime = "";
-            this.EndTime = "";
-            this.IsPublish = 0;
-            this.FontColor = "";
-            this.FocusFontColor = "";
-            this.DisplayRange = "";
+    var fmStaticHtml = (function () {
+        function fmStaticHtml() {
+            this.StaticHtmlId = "";
+            this.HtmlCode = "";
+            this.HtmlUrl = "";
+            this.HtmlName = "";
+            this.HtmlBannerUrl = "";
+            this.HtmlAnimateUrl = "";
+            this.HtmlBackgroundUrl = "";
+            this.HtmlType = 1;
+            this.REC_CreateTime = "";
             this.REC_CreateBy = "";
             this.REC_ModifyBy = "";
-            
+            this.StartTime = "";
+            this.EndTime = "";
+            this.RoleCode = "";
+            /// <summary>
+            /// 1:过期活动自动下架
+            /// 0:不适用自动过期
+            /// </summary>
+            this.IsAutoDisabled = 1;
+
             this.preUrl = "";
         }
-        return ActivityBase;
+        return fmStaticHtml;
     })();
 
-    var fmItemDetail = (function () {
-        function fmItemDetail() {
-            this.ActivityId = "";
-            this.ActivityFloorId = "";
-            this.FloorItemId = "";
-            this.FloorItemName = "";
+    var fmStaticDetail = (function () {
+        function fmStaticDetail() {
+            this.StaticDetailId = "";
+            this.StaticHtmlId = "";
+            this.Name = "";
             this.Title = "";
-            this.FloorItemType = 1;//default 图片
+            this.DetailType = 1;//default 图片
             this.HtmlBackgroundUrl = "";
             this.LucencyAnchor = "";
             this.CommodityCodes = "";
+            this.Tag = "";
             this.Sort = 0;
             this.REC_CreateTime = "";
             this.REC_CreateBy = "";
             this.REC_ModifyBy = "";
         }
-        return fmItemDetail;
+        return fmStaticDetail;
     })();
 
     var fmAnchor = (function () {
@@ -86,8 +92,8 @@ var fmModel = {};
     })(fmModel.eDetailType || (fmModel.eDetailType = {}));
 
 
-    fmModel.ActivityBase = ActivityBase;
-    fmModel.fmItemDetail = fmItemDetail;
+    fmModel.fmStaticHtml = fmStaticHtml;
+    fmModel.fmStaticDetail = fmStaticDetail;
     fmModel.fmAnchor = fmAnchor;
     fmModel.fmProCode = fmProCode;
     

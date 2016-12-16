@@ -1,10 +1,9 @@
 ﻿using System.Web.Mvc;
-using Proxy;
 using Sale4.Controllers.API;
 
 namespace Sale4.Controllers
 {
-    public class HomeController : BaseApiController
+    public class HomeController : BaseController
     {
         
 

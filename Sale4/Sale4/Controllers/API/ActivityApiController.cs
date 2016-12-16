@@ -1,100 +1,104 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web.Mvc;
-using Proxy;
+using Sale4.Controllers.API.Models;
+using Sale4.Controllers.Common;
 using Sale4.Models;
 
 namespace Sale4.Controllers.API
 {
-    public class ActivityApiController : BaseApiController
+    public class ActivityApiController : BaseController
     {
-        BLL_Fct_ActivityBase _activityBase = new BLL_Fct_ActivityBase();
 
-        //public JsonResult GetDetail(string id)
-        //{
-        //    var now = DateTime.Now;
-        //    var roleCode = base.UserSession.User.EmployeeType;
-        //    var html = new YgwStaticHtml();
+        public JsonResult GetDetail(string id)
+        {
+            var staticHtml =new StaticHtmlViewModel();
+            var firstOrDefault = GetStatics(id).FirstOrDefault();
+            if (firstOrDefault != null && firstOrDefault.StaticHtmlId != Guid.Empty)
+            {
+                staticHtml = new StaticHtmlViewModel
+                {
+                    StaticHtmlId = firstOrDefault.StaticHtmlId,
+                    HtmlCode = firstOrDefault.HtmlCode,
+                    HtmlUrl = firstOrDefault.htmlUrl,
+                    HtmlName = firstOrDefault.htmlName,
+                    HtmlBannerUrl = firstOrDefault.HtmlBannerUrl,
+                    HtmlAnimateUrl = firstOrDefault.HtmlAnimateUrl,
+                    HtmlBackgroundUrl = firstOrDefault.HtmlBackgroundUrl,
+                    HtmlType = firstOrDefault.HtmlType,
+                    REC_CreateTime = firstOrDefault.REC_CreateTime.ToString("yyyy年MM月dd日"),
+                    REC_CreateBy = firstOrDefault.REC_CreateBy,
+                    REC_ModifyBy = firstOrDefault.REC_ModifyBy,
+                    StartTime = firstOrDefault.StartTime.ToString("yyyy年MM月dd日"),
+                    EndTime = firstOrDefault.EndTime.ToString("yyyy年MM月dd日")
+                };
+            }
 
-        //    if (!string.IsNullOrWhiteSpace(id) && roleCode != ERoleCode.None)
-        //    {
-        //        var result = _activityServer.GetStatics((int)roleCode, id);
-        //        if (result.State && result.ResultObj != null)
-        //        {
-        //            var statics = result.ResultObj as List<YgwStaticHtml>;
-        //            if (statics != null)
-        //            {
-        //                html = statics.FirstOrDefault();
-        //            }
-        //        }
-        //    }
+            return GetJsonResult(new {data = staticHtml});
+        }
 
-        //    return GetJsonResult(new { data = html });
-        //}
-
-
-        //public JsonResult GetStatics()
-        //{
-        //    var roleCode = base.UserSession.User.EmployeeType;
-
-        //    var statics = new List<YgwStaticHtml>();
-        //    if (roleCode != ERoleCode.None)
-        //    {
-        //        var result = _activityServer.GetStatics((int)roleCode);
-        //        if (result.State && result.ResultObj != null)
-        //        {
-        //            statics = result.ResultObj as List<YgwStaticHtml>;
-        //        }
-        //        if (statics != null && statics.Any())
-        //        {
-        //            statics = statics.OrderBy(e => e.ExpiresState).ToList();
-        //        }
-        //    }
-
-        //    return Json(new { data = statics }, JsonRequestBehavior.AllowGet);
-        //}
+        /// <summary>
+        /// 获取静态活动列表
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetDetails()
+        {
+            var statics = new List<StaticHtmlViewModel>();
+            var staticHtml = GetStatics();
+            foreach (var s in staticHtml)
+            {
+                statics.Add(
+                new StaticHtmlViewModel()
+                {
+                    StaticHtmlId = s.StaticHtmlId,
+                    HtmlCode = s.HtmlCode,
+                    HtmlUrl = s.htmlUrl,
+                    HtmlName = s.htmlName,
+                    HtmlBannerUrl = s.HtmlBannerUrl,
+                    HtmlAnimateUrl = s.HtmlAnimateUrl,
+                    HtmlBackgroundUrl = s.HtmlBackgroundUrl,
+                    HtmlType = s.HtmlType,
+                    REC_CreateTime = s.REC_CreateTime.ToString("yyyy年MM月dd日"),
+                    REC_CreateBy = s.REC_CreateBy,
+                    REC_ModifyBy = s.REC_ModifyBy,
+                    StartTime = s.StartTime.ToString("yyyy年MM月dd日"),
+                    EndTime = s.EndTime.ToString("yyyy年MM月dd日")
+                });
+            }
+            return GetJsonResult(new { data = statics });
+        }
 
 
         public JsonResult GetStaticsPage(int pageSize, int index)
         {
-            try
+            var page = new PageResult<StaticHtmlViewModel>()
             {
-                var page = new PageResult<ActivityBaseViewModels>()
-                {
-                    PageSize = pageSize,
-                    List = new List<ActivityBaseViewModels>()
-                };
+                PageSize = pageSize,
+                List = new List<StaticHtmlViewModel>()
+            };
 
-                var result = _activityBase.GetBasePage(pageSize, index);
-                if (result != null && result.Count > 0)
-                {
-                    page.List = (from r in result.List
-                        select new ActivityBaseViewModels
-                        {
-                            ActivityId = r.ActivityId,
-                            ActivityCode = r.ActivityCode,
-                            ActivityName = r.ActivityName,
-                            EndTime = r.EndTime.ToString("yyyy年MM月dd日"),
-                            StartTime = r.StartTime.ToString("yyyy年MM月dd日"),
-                            IsPublish = r.IsPublish,
-                            REC_CreateBy = r.REC_CreateBy,
-                            REC_ModifyBy = r.REC_ModifyBy,
-                            REC_CreateTime = r.REC_CreateTime.ToString("yyyy年MM月dd日"),
-                            REC_ModifyTime = r.REC_ModifyTime.ToString("yyyy年MM月dd日")
-                        }
-                        ).ToList();
-                    page.List = page.List.OrderBy(e => e.ExpiresState).ToList();
-                    page.Count = page.Count;
-                }
-                
-                return Json(new { data = page.List, pageCount = page.PageCount, allCount = page.Count }, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
+            var result = GetBasePage(pageSize, index);
+            if (result != null && result.Count > 0)
             {
-
+                page.List = (from r in result.List
+                    select new StaticHtmlViewModel
+                    {
+                        StaticHtmlId = r.StaticHtmlId,
+                        HtmlCode = r.HtmlCode,
+                        HtmlName = r.htmlName,
+                        EndTime = r.EndTime.ToString("yyyy年MM月dd日"),
+                        StartTime = r.StartTime.ToString("yyyy年MM月dd日"),
+                        REC_CreateBy = r.REC_CreateBy,
+                        REC_ModifyBy = r.REC_ModifyBy,
+                        REC_CreateTime = r.REC_CreateTime.ToString("yyyy年MM月dd日")
+                    }
+                    ).ToList();
+                page.List = page.List.OrderBy(e => e.ExpiresState).ToList();
+                page.Count = page.Count;
             }
-            return null;
+            return GetJsonResult(new {data = page.List, pageCount = page.PageCount, allCount = page.Count});
         }
 
         //public JsonResult DeleteStatics(string id)
@@ -133,33 +137,62 @@ namespace Sale4.Controllers.API
         //}
 
 
-        //public JsonResult GetStaticsDetails(string id)
-        //{
-        //    var details = new List<YgwStaticDetail>();
-        //    if (!string.IsNullOrWhiteSpace(id))
-        //    {
-        //        var result = _activityServer.GetStaticsDetailByHtmlId(id);
-        //        if (result.State && result.ResultObj != null)
-        //        {
-        //            details = result.ResultObj as List<YgwStaticDetail>;
-        //        }
-        //    }
-        //    return Json(new { data = details }, JsonRequestBehavior.AllowGet);
-        //}
+        public JsonResult GetStaticsDetails(string id)
+        {
+            var details = new List<StaticDetailViewModel>();
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var sql = @"
+SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId ='{0}' ORDER BY Sort DESC";
+                var modelFctStaticDetail = BaseConnection.Query<Model_Fct_StaticDetail>(string.Format(sql, id));
+                details.AddRange(modelFctStaticDetail.Select(m => new StaticDetailViewModel()
+                {
+                    StaticDetailId = m.StaticDetailId,
+                    StaticHtmlId = m.StaticHtmlId,
+                    Name = m.Name,
+                    Title = m.Title,
+                    DetailType = m.DetailType,
+                    HtmlBackgroundUrl = m.HtmlBackgroundUrl,
+                    LucencyAnchor = m.LucencyAnchor,
+                    CommodityCodes = m.CommodityCodes,
+                    Tag = m.Tag,
+                    Sort = m.Sort,
+                    REC_CreateTime = m.REC_CreateTime.ToString("yyyy年MM月dd日"),
+                    REC_CreateBy = m.REC_CreateBy,
+                    REC_ModifyBy = m.REC_ModifyBy,
+                }));
+            }
+            return GetJsonResult(new { data = details });
+        }
 
-        //public JsonResult GetStaticsDetail(string id)
-        //{
-        //    var detail = new YgwStaticDetail();
-        //    if (!string.IsNullOrWhiteSpace(id))
-        //    {
-        //        var result = _activityServer.GetStaticsDetailByDetailId(id);
-        //        if (result.State && result.ResultObj != null)
-        //        {
-        //            detail = result.ResultObj as YgwStaticDetail;
-        //        }
-        //    }
-        //    return Json(new { data = detail }, JsonRequestBehavior.AllowGet);
-        //}
+
+        public JsonResult GetStaticsDetail(string id)
+        {
+            var detail = new StaticDetailViewModel();
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var sql = @"
+SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticDetailId ='{0}' ORDER BY Sort DESC";
+                var m = BaseConnection.Single<Model_Fct_StaticDetail>(string.Format(sql, id));
+                detail = new StaticDetailViewModel()
+                {
+                    StaticDetailId = m.StaticDetailId,
+                    StaticHtmlId = m.StaticHtmlId,
+                    Name = m.Name,
+                    Title = m.Title,
+                    DetailType = m.DetailType,
+                    HtmlBackgroundUrl = m.HtmlBackgroundUrl,
+                    LucencyAnchor = m.LucencyAnchor,
+                    CommodityCodes = m.CommodityCodes,
+                    Tag = m.Tag,
+                    Sort = m.Sort,
+                    REC_CreateTime = m.REC_CreateTime.ToString("yyyy年MM月dd日"),
+                    REC_CreateBy = m.REC_CreateBy,
+                    REC_ModifyBy = m.REC_ModifyBy,
+                };
+            }
+            return GetJsonResult(new { data = detail });
+        }
 
         //public JsonResult SaveStaticsHtml(YgwStaticHtml html)
         //{
@@ -388,5 +421,61 @@ namespace Sale4.Controllers.API
 
 
         #endregion 预览
+
+
+
+        /// <summary>
+        /// get act code
+        /// </summary>
+        /// <returns></returns>
+        public string GetNewActCode()
+        {
+            var result = string.Empty;
+            var now = DateTime.Now;
+            var sql = @"SELECT COUNT(1) FROM Fct_StaticHtml WHERE Disabled = 0 AND Fct_StaticHtml.REC_CreateTime >= '{0}' AND Fct_StaticHtml.REC_CreateTime < '{1}'";
+            var num = BaseConnection.Query<Model_Fct_StaticHtml>(string.Format(sql, now.ToString("yyyy-M-d 00:00:00"), now.ToString("yyyy-M-d 23:59:59")));
+            result = now.ToString("yyyyMMdd") + num;
+            return result;
+        }
+
+        #region private
+        private PageResult<Model_Fct_StaticHtml> GetBasePage(int pageSize, int index)
+        {
+            var page = new PageResult<Model_Fct_StaticHtml>();
+            index = index < 0 ? 0 : index;
+            var start = (index - 1)* pageSize;
+            var end = index * pageSize;
+            var sql = @"
+WITH LIST as
+  (
+    SELECT ROW_NUMBER() OVER(ORDER BY Fct_StaticHtml.Rec_CreateTime DESC) AS ROWNUM,
+                          Fct_StaticHtml.*                   
+FROM dbo.Fct_StaticHtml WHERE Fct_StaticHtml.Disabled = 0
+  )  SELECT * FROM LIST WHERE ROWNUM BETWEEN {0} AND {1}";
+            var sqlcount = @"
+    SELECT COUNT(1) FROM dbo.Fct_StaticHtml WHERE Fct_StaticHtml.Disabled = 0";
+            page.List = BaseConnection.Query<Model_Fct_StaticHtml>(string.Format(sql, start, end));
+            page.Count = BaseConnection.Count(sqlcount);
+            return page;
+        }
+        private List<Model_Fct_StaticHtml> GetStatics(string id = "")
+        {
+            var statics = new List<Model_Fct_StaticHtml>();
+            var sql = string.Empty;
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                sql = @"SELECT * FROM Fct_StaticHtml WHERE Disabled = 0 AND HtmlType = 1 ORDER BY Fct_StaticHtml.REC_ModifyTime DESC";
+                statics = BaseConnection.Query<Model_Fct_StaticHtml>(sql);
+            }
+            else
+            {
+                sql = @"SELECT * FROM Fct_StaticHtml WHERE Disabled = 0 AND HtmlType = 1 AND Fct_StaticHtml.StaticHtmlId ='{0}' ORDER BY Fct_StaticHtml.REC_ModifyTime DESC";
+                statics = BaseConnection.Query<Model_Fct_StaticHtml>(string.Format(sql, id));
+            }
+
+            return statics;
+        }
+
+        #endregion
     }
 }

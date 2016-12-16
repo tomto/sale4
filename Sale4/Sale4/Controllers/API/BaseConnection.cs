@@ -4,11 +4,9 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
 
-namespace Proxy
+namespace Sale4.Controllers.API
 {
     public static class BaseConnection
     {
@@ -19,8 +17,8 @@ namespace Proxy
         {
             if (string.IsNullOrEmpty(connString))
             {
-                connString = "Data Source=.;Initial Catalog=ActivityDB;User ID=sa;Password=7598115";
-            }
+                connString = "Data Source=172.17.1.106;Initial Catalog=Efruit_CN_SH;User ID=ygtest;Password=ygtest";
+            }            
             SqlConnection conn = new SqlConnection(connString);
             conn.Open();
            return conn;
@@ -34,7 +32,7 @@ namespace Proxy
             {
                 return conn.Query<T>(sql, m).ToList();
             }
-        }
+        }       
 
         public static List<T> Query<T>(string sql)
         {
@@ -45,15 +43,21 @@ namespace Proxy
             }
         }
 
+        public static T Single<T>(string sql)
+        {
+            IDbConnection conn;
+            using (conn = OpenConnection())
+            {
+                return conn.QueryFirst<T>(sql);
+            }
+        }
+
         public static int Count(string sql)
         {
             IDbConnection conn;
             using (conn = OpenConnection())
             {
-                var count = 0;
-                var result = conn.Query(sql).FirstOrDefault() ;
-                Int32.TryParse(result,out count);
-                return count;
+                return conn.ExecuteScalar<int>(sql);
             }
         }
 

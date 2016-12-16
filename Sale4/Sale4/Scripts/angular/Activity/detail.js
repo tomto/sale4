@@ -30,7 +30,7 @@ mainApp.config(["$routeProvider",
 mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService) {
     $scope.norepeat = true;
     $scope.floorsData = [];
-    $scope.ActivityBase = new fmModel.ActivityBase();
+    $scope.fmStaticHtml = new fmModel.fmStaticHtml();
     $scope.StaticHtmlId = $routeParams.id || "";
     $scope.eDetailType = fmModel.eDetailType;
 
@@ -44,7 +44,7 @@ mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService
         if ($scope.norepeat && $scope.StaticHtmlId != "") {
             $scope.norepeat = false;
             activityService.GetDetail($scope.StaticHtmlId, function (result) {
-                $scope.ActivityBase = result.data;
+                $scope.fmStaticHtml = result.data;
                 $scope.norepeat = true;
             });
             $scope.initFloors();
@@ -221,6 +221,12 @@ mainApp.controller("floorCtrl", function ($scope, $routeParams, activityService)
                         }
                     });
                     $scope.fmStaticDetail.Title = $(".panel-body canvas").attr("height") || 0;
+                } else {
+                    if ($scope.getStrSize($scope.fmStaticDetail.Tag) > 16) {
+                        $.messager.alert("角标长度大于8个中文字符");
+                        result = false;
+                        return false;
+                    }
                 }
                 if (result == false) {
                     return false;
@@ -263,4 +269,28 @@ mainApp.controller("floorCtrl", function ($scope, $routeParams, activityService)
         }
         return result.trim();
     };
+
+
+    // 中文字字节
+    $scope.byteRangeLength = function (value, param) {
+        var length = value.length;
+        for (var i = 0; i < value.length; i++) {
+            if (value.charCodeAt(i) > 127) {
+                length++;
+            }
+        }
+        return (length < param[0] && length > param[1]);
+    };
+
+    $scope.getStrSize = function (str) {
+        if (str === null || str === undefined || str === "") return 0;
+        var realLength = 0, len = str.length, charCode = -1;
+        for (var i = 0; i < len; i++) {
+            charCode = str.charCodeAt(i);
+            if (charCode >= 0 && charCode <= 128) realLength += 1;
+            else realLength += 2;
+        }
+        return realLength;
+    };
+
 });

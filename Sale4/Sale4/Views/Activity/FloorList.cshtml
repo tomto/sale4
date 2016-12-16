@@ -22,7 +22,7 @@
                 <tbody>
                     <tr ng-repeat="x in floorsData">
                         <td ng-bind="$index + 1"></td>
-                        <td ng-bind="x.Name"></td>
+                        <td ><a ng-bind="x.Name" ng-href="actDetail#/Floor/Edit/{{x.StaticHtmlId}}/{{x.StaticDetailId}}"></a></td>
                         <td ng-bind="x.DetailType == eDetailType.Html ? '图片' : x.DetailType == eDetailType.SideBar ? '侧边栏' : x.DetailType == eDetailType.ProCode ?  '优惠代码' : x.DetailType == eDetailType.List4 ?  '列表4'  : x.DetailType == eDetailType.List3 ?  '列表3':'列表2' "></td>
                         <td ng-bind="x.Sort"></td>
                         <td ng-bind="x.REC_CreateTime"></td>
