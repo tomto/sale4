@@ -10,6 +10,7 @@ namespace Sale4.Controllers.Common
     {
         public static string SiteHost = ConfigurationManager.AppSettings["SiteHost"];
 
-
+        public static string ImgUrl = ConfigurationManager.AppSettings["ImgUrl"];
+        
     }
 }

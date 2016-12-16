@@ -121,6 +121,7 @@
     <Compile Include="Controllers\API\CallResult.cs" />
     <Compile Include="Controllers\API\Models\Model_Fct_StaticDetail.cs" />
     <Compile Include="Controllers\API\Models\Model_Fct_StaticHtml.cs" />
+    <Compile Include="Controllers\API\UploadController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Common\ConvertDtHelper.cs" />
     <Compile Include="Controllers\Common\SaleCommon.cs" />
@@ -137,6 +138,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\activity.css" />
+    <Content Include="Content\UploadFile\WebUploader\Uploader.swf" />
+    <Content Include="Content\UploadFile\WebUploader\webuploader.css" />
+    <Content Include="Content\UploadFile\WebUploader\webuploader.js" />
     <Content Include="images\image_null.png" />
     <Content Include="images\logo-mask.png" />
     <Content Include="images\sort_asc.png" />
@@ -268,6 +272,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\UploadFile\file\" />
+    <Folder Include="Views\Upload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

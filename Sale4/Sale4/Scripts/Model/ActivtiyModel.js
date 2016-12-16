@@ -54,7 +54,7 @@ var fmModel = {};
             this.Coord = "";
             this.Type = "";
             this.Operate = "";
-            this.Placeholder = "链接如:http://www.yiguo.com";
+            this.Placeholder = "链接如:http://www.google.com";
             this.Index = "";
         }
         return fmAnchor;

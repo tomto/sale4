@@ -80,8 +80,13 @@ namespace Sale4
                 "API/CopyHtml",
                 new { action = "CopyHtml", controller = "ActivityApi", id = UrlParameter.Optional }
             );
-
-
+            
+            routes.MapRoute(
+                "Upload",
+                "Upload",
+                new { action = "Index", controller = "Upload", url = UrlParameter.Optional }
+            );
+            
 
             #endregion API
             routes.MapRoute(

@@ -91,7 +91,7 @@ angular.module("hjcanvas", [])
             scope.changePlaceholder = function (x) {
                 switch (x.Type) {
                     case "0":
-                        x.Placeholder = "链接如:http://www.yiguo.com";
+                        x.Placeholder = "链接如:http://www.google.com";
                         break;
                     case "1":
                         x.Placeholder = "商品code";

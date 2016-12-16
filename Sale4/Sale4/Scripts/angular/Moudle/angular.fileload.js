@@ -34,8 +34,8 @@ angular.module("hjupload", []).directive("hjupload", function () {
                 if ($(".j_filePicker").index($(element).find(".j_filePicker")) + 1 == scope.max) {
                     var pickbtn;
                     var uploader = WebUploader.create({
-                        swf: '/Content/WebUploader/Uploader.swf',
-                        server: 'http://img04.yiguo.com/Handlers/CMSWebUpload.ashx?swfupload=false&UserID=cms&Token=08DCA7DE5A7D445BA29B01BB20E4D9DA',
+                        swf: '/Content/UploadFile/WebUploader/Uploader.swf',
+                        server: '/Upload',
                         pick: '.j_filePicker',
                         resize: false,
                         auto: true,
