@@ -48,7 +48,11 @@ mainApp.controller("indexCtrl", function ($scope, activityService) {
                 $scope.norepeat = false;
                 activityService.DeleteStatics(staticHtmlId, function (result) {
                     $scope.norepeat = true;
-                    $scope.initIndex();
+                    if (result.data > 0) {
+                        $scope.initIndex();
+                    } else {
+                        $.messager.alert("删除失败!");
+                    }
                 });
             };
         });

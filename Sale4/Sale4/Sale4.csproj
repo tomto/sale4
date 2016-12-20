@@ -43,6 +43,10 @@
       <HintPath>..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DapperExtensions, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DapperExtensions.1.5.0\lib\net45\DapperExtensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -119,8 +123,8 @@
     <Compile Include="Controllers\API\ActivityApiController.cs" />
     <Compile Include="Controllers\API\BaseConnection.cs" />
     <Compile Include="Controllers\API\CallResult.cs" />
-    <Compile Include="Controllers\API\Models\Model_Fct_StaticDetail.cs" />
-    <Compile Include="Controllers\API\Models\Model_Fct_StaticHtml.cs" />
+    <Compile Include="Controllers\API\Models\Fct_StaticDetail.cs" />
+    <Compile Include="Controllers\API\Models\Fct_StaticHtml.cs" />
     <Compile Include="Controllers\API\UploadController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Common\ConvertDtHelper.cs" />

@@ -5,27 +5,29 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
+using DapperExtensions;
+using Sale4.Controllers.API.Models;
 
 namespace Sale4.Controllers.API
 {
     public static class BaseConnection
     {
-       static string connString = ConfigurationManager.AppSettings["connectionString"];
+       static string _connString = ConfigurationManager.AppSettings["connectionString"];
        
-
-       public static SqlConnection OpenConnection()
+        public static SqlConnection OpenConnection()
         {
-            if (string.IsNullOrEmpty(connString))
+            if (string.IsNullOrEmpty(_connString))
             {
-                connString = "Data Source=172.17.1.106;Initial Catalog=Efruit_CN_SH;User ID=ygtest;Password=ygtest";
+                _connString = "Data Source=172.17.1.106;Initial Catalog=Efruit_CN_SH;User ID=ygtest;Password=ygtest";
             }            
-            SqlConnection conn = new SqlConnection(connString);
+            SqlConnection conn = new SqlConnection(_connString);
             conn.Open();
            return conn;
         }
 
+       #region query
 
-        public static List<T> Query<T>(string sql,T m)
+       public static List<T> Query<T>(string sql,T m)
         {
             IDbConnection conn;
             using (conn = OpenConnection())
@@ -43,7 +45,7 @@ namespace Sale4.Controllers.API
             }
         }
 
-        public static T Single<T>(string sql)
+        public static T QueryFirst<T>(string sql)
         {
             IDbConnection conn;
             using (conn = OpenConnection())
@@ -52,14 +54,25 @@ namespace Sale4.Controllers.API
             }
         }
 
-        public static int Count(string sql)
+        public static T QueryFirst<T>(T model) where T : class 
         {
             IDbConnection conn;
             using (conn = OpenConnection())
             {
-                return conn.ExecuteScalar<int>(sql);
+                return conn.Get<T>(model);
             }
         }
+
+        public static T Scalar<T>(string sql)
+        {
+            IDbConnection conn;
+            using (conn = OpenConnection())
+            {
+                return conn.ExecuteScalar<T>(sql);
+            }
+        }
+
+        #endregion query
 
         public static int Update<T>(string sql)
         {
@@ -69,15 +82,32 @@ namespace Sale4.Controllers.API
                 return conn.Execute(sql);
             }
         }
-        
-        //public int Insert<T>(T model, string sql)
-        //{
-        //    return conn.Execute(sql, model);
-        //}
 
-        //public int Delete<T>(T model, string sql)
+        public static int Update<T>(T model) where T : class 
+        {
+            IDbConnection conn;
+            using (conn = OpenConnection())
+            {
+                return conn.Update(model) ? 1 : 0;
+            }
+        }
+
+        public static int Insert<T>(T model) where T : class
+        {
+            IDbConnection conn;
+            using (conn = OpenConnection())
+            {
+                return conn.Insert(model);
+            }
+        }
+
+        //public int Delete<T>(T model)
         //{
-        //    return conn.Execute(sql, model);
+        //    IDbConnection conn;
+        //    using (conn = OpenConnection())
+        //    {
+        //        return conn.Execute(model);
+        //    }
         //}
     }
 }

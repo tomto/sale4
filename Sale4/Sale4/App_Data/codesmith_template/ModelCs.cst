@@ -12,13 +12,13 @@ using System.Data;
 
 namespace YGWeb.Model
 {
-    public class Model_<%=this.SourceTable.Name %>
+    public class <%=this.SourceTable.Name %>
     {
 		<% foreach (ColumnSchema column in this.SourceTable.Columns) { %>
 		private <%=ToType(column)%> _<%=ToLowercase(column.Name)%>;
 		<%}%>
 		
-		public Model_<%=this.SourceTable.Name %>(){}
+		public <%=this.SourceTable.Name %>(){}
 		
 		 
 		<% foreach (ColumnSchema column in this.SourceTable.Columns) { %>

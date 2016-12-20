@@ -2,7 +2,8 @@
 
 namespace Sale4.Controllers.API.Models
 {
-    public class Model_Fct_StaticDetail
+    [Serializable]
+    public class Fct_StaticDetail
     {
 		private Guid _staticdetailid;
 		private Guid _statichtmlid;
@@ -20,7 +21,7 @@ namespace Sale4.Controllers.API.Models
 		private string _rec_modifyby;
 		private string _tag;
 		
-		public Model_Fct_StaticDetail(){}
+		public Fct_StaticDetail(){}
 		
 		 
 		/// <summary>

@@ -59,8 +59,10 @@ mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService
                 $scope.norepeat = false;
                 activityService.DeleteStaticsDetail(id, function (result) {
                     $scope.norepeat = true;
-                    if (result.data.ResultObj > 0) {
+                    if (result.data > 0) {
                         $scope.initFloors();
+                    } else {
+                        $.messager.alert("删除失败!");
                     }
                 });
             }
@@ -88,16 +90,8 @@ mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService
                     if (result.data == 1) {
                         $.messager.alert("保存成功!");
                         window.location.href = "/actIndex";
-                    } else if (result.data == 2) {
-                        $.messager.alert("结束时间不能小于开始时间或者为空!");
-                    } else if (result.data == 3) {
-                        $.messager.alert("编号已存在!");
-                    } else if (result.data == 4) {
-                        $.messager.alert("编号不能为空!");
-                    } else if (result.data == 5) {
-                        $.messager.alert("名称不能为空!");
                     } else {
-                        $.messager.alert("保存失败!");
+                        $.messager.alert(result.msg);
                     }
                 });
             }
