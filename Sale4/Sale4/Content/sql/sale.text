@@ -1,0 +1,181 @@
+
+
+use master 
+
+IF not EXISTS(SELECT * FROM sysdatabases WHERE name = 'ActivityDB')
+CREATE DATABASE [ActivityDB]
+GO
+
+
+USE [ActivityDB]
+GO
+
+/****** Object:  Table [dbo].[Fct_ActivityBase]    Script Date: 11/17/2016 11:01:20 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Fct_ActivityBase](
+	[ActivityId] [uniqueidentifier] NOT NULL,
+	[ActivityCode] [nvarchar](50) NOT NULL,
+	[ActivityName] [nvarchar](200) NOT NULL,
+	[ActivityType] [int] NOT NULL,
+	[ActivityBgImg] [nvarchar](200) NULL,
+	[ActivityBgColor] [nvarchar](50) NULL,
+	[StartTime] [datetime] NULL,
+	[EndTime] [datetime] NULL,
+	[IsPublish] [int] NOT NULL,	
+	[FontColor] [nvarchar](50) NULL,
+	[FocusFontColor] [nvarchar](50) NULL,
+	[DisplayRange] [int] NOT NULL,		
+	[Disabled] [int] NULL,
+	[REC_CreateTime] [datetime] NULL,
+	[REC_CreateBy] [varchar](50) NULL,
+	[REC_ModifyTime] [datetime] NULL,
+	[REC_ModifyBy] [varchar](50) NULL	
+PRIMARY KEY CLUSTERED 
+(
+	[ActivityId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'活动code' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'ActivityCode'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'活动名称' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'ActivityName'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'活动类型0:h5' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'ActivityType'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'活动背景图' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'ActivityBgImg'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'活动背景色' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'ActivityBgColor'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'活动开始时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'StartTime'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'活动结束时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'EndTime'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'发布状态0:未发布,1:发布' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'IsPublish'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'字体色' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'FontColor'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'字体选中色' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'FocusFontColor'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'0全部，1网站，2移动 3:果易达 4:易海淘 5:团来团趣' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityBase', @level2type=N'COLUMN',@level2name=N'DisplayRange'
+GO
+
+
+
+
+
+
+
+CREATE TABLE [dbo].[Fct_ActivityFloor](
+	[ActivityFloorId] [uniqueidentifier] NOT NULL,
+	[ActivityId] [uniqueidentifier] NOT NULL,
+	[FloorType] [int] NOT NULL,
+	[Sort] [int] NOT NULL,	
+	[FontColor] [NVARCHAR](50) NULL,
+	[FontFocusColor] [NVARCHAR](50) NULL,
+	[Disabled] [int] NULL,
+	[REC_CreateTime] [datetime] NULL,
+	[REC_CreateBy] [varchar](50) NULL,
+	[REC_ModifyTime] [datetime] NULL,
+	[REC_ModifyBy] [varchar](50) NULL,
+	[FloorName] [varchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ActivityFloorId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'楼层类型0:普通,1:banner,2:Special' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityFloor', @level2type=N'COLUMN',@level2name=N'FloorType'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'楼层排序' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_ActivityFloor', @level2type=N'COLUMN',@level2name=N'Sort'
+GO
+
+
+
+
+
+
+CREATE TABLE [dbo].[Fct_FloorItem](
+	[FloorItemId] [uniqueidentifier] NOT NULL,
+	[ActivityFloorId] [uniqueidentifier] NOT NULL,
+	[FloorItemName] [varchar](50) NULL,
+	[FloorItemType] [int] NOT NULL,
+	[Sort] [int] NOT NULL,
+	[FloorItemLink] [varchar](200) NULL,
+	[EventCode] [varchar](200) NULL,
+	[EventParams] [varchar](200) NULL,
+	[FloorItemImgUrl] [nvarchar](200) NULL,
+	[CommodityCodes] [nvarchar](1000) NULL,
+	[ShowCommodityNum] [int] NULL,
+	[LucencyAnchor] [varchar](max) NULL,
+	[Disabled] [int] NULL,
+	[REC_CreateTime] [datetime] NULL,
+	[REC_CreateBy] [varchar](50) NULL,
+	[REC_ModifyTime] [datetime] NULL,
+	[REC_ModifyBy] [varchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[FloorItemId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'楼层内容类型' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_FloorItem', @level2type=N'COLUMN',@level2name=N'FloorItemType'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'楼层内容排序' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_FloorItem', @level2type=N'COLUMN',@level2name=N'Sort'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'楼层内容链接' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_FloorItem', @level2type=N'COLUMN',@level2name=N'FloorItemLink'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'楼层内容事件' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_FloorItem', @level2type=N'COLUMN',@level2name=N'EventCode'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'楼层内容事件参数' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_FloorItem', @level2type=N'COLUMN',@level2name=N'EventParams'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'楼层内容图片url' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_FloorItem', @level2type=N'COLUMN',@level2name=N'FloorItemImgUrl'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'楼层内容商品code' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_FloorItem', @level2type=N'COLUMN',@level2name=N'CommodityCodes'
+GO
+
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'显示的商品数量' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Fct_FloorItem', @level2type=N'COLUMN',@level2name=N'ShowCommodityNum'
+GO
+
+
+
+
