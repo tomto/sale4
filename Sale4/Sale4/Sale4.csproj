@@ -127,6 +127,8 @@
     <Compile Include="Controllers\API\Models\Fct_StaticHtml.cs" />
     <Compile Include="Controllers\API\UploadController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\Common\Ajax\AjaxData.cs" />
+    <Compile Include="Controllers\Common\Ajax\AjaxRequest.cs" />
     <Compile Include="Controllers\Common\ConvertDtHelper.cs" />
     <Compile Include="Controllers\Common\SaleCommon.cs" />
     <Compile Include="Controllers\HomeController.cs" />

@@ -23,14 +23,14 @@ namespace Sale4.Controllers.API
                     var name = Guid.NewGuid() + DateTime.Now.ToString("yyyyMMdd");
                     var file = this.Server.MapPath("~/Content/UploadFile/images/" + name);
                     files[0].SaveAs(file);
-                    return GetJsonResult(new { state = "SUCCESS", msg = file + "上传成功", url = SaleCommon.ImgUrl + name });
+                    return JsonResult(1,file + "上传成功", SaleCommon.ImgUrl + name);
                 }
                 catch (Exception ex)
                 {
-                    return GetJsonResult(new { msg = ex.StackTrace }); 
+                    return JsonFail(ex.StackTrace);
                 }
             }
-            return GetJsonResult(new { msg = "上传失败" }); 
+            return JsonFail("上传失败");
         }
     }
 }

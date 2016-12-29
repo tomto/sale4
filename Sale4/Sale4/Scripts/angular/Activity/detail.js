@@ -44,7 +44,7 @@ mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService
         if ($scope.norepeat && $scope.StaticHtmlId != "") {
             $scope.norepeat = false;
             activityService.GetDetail($scope.StaticHtmlId, function (result) {
-                $scope.fmStaticHtml = result.data;
+                $scope.fmStaticHtml = result.Data;
                 $scope.norepeat = true;
             });
             $scope.initFloors();
@@ -59,7 +59,7 @@ mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService
                 $scope.norepeat = false;
                 activityService.DeleteStaticsDetail(id, function (result) {
                     $scope.norepeat = true;
-                    if (result.data > 0) {
+                    if (result.IsSuccess) {
                         $scope.initFloors();
                     } else {
                         $.messager.alert("删除失败!");
@@ -87,9 +87,9 @@ mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService
                 $scope.norepeat = false;
                 activityService.SaveStaticsHtml($scope.fmStaticHtml, function(result) {
                     $scope.norepeat = true;
-                    if (result.data == 1) {
+                    if (result.IsSuccess) {
                         $.messager.alert("保存成功!");
-                        window.location.href = "/actIndex";
+                        window.location.href = window.location.href + "/" + result.data;
                     } else {
                         $.messager.alert(result.msg);
                     }
@@ -234,14 +234,11 @@ mainApp.controller("floorCtrl", function ($scope, $routeParams, activityService)
                 $scope.norepeat = false;
                 activityService.SaveStaticsDetail($scope.fmStaticDetail, function (result) {
                     $scope.norepeat = true;
-                    if (result.data == 1) {
+                    if (result.IsSuccess) {
                         $.messager.alert("保存成功!");
                         window.location.href = "actDetail#/Edit/" + $scope.fmStaticDetail.StaticHtmlId;
-                    } else if (result.data == 5) {
-                        $.messager.alert("名称不能为空!");
                     } else {
-                        if (result.msg != null && result.msg != "") $.messager.alert(result.msg);
-                        else $.messager.alert("保存失败!");
+                        $.messager.alert(result.msg);
                     }
                 });
             }

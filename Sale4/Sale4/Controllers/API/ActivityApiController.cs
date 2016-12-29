@@ -15,8 +15,9 @@ namespace Sale4.Controllers.API
 
         public JsonResult GetDetail(string id)
         {
-            var staticHtml =new StaticHtmlViewModel();
-            var firstOrDefault = GetStatics(id).FirstOrDefault();
+            var staticHtml = new StaticHtmlViewModel();
+            var firstOrDefault = BaseConnection.QueryFirst(new Fct_StaticHtml { StaticHtmlId = new Guid(id) });
+            //var firstOrDefault = GetStatics(id).FirstOrDefault();
             if (firstOrDefault != null && firstOrDefault.StaticHtmlId != Guid.Empty)
             {
                 staticHtml = new StaticHtmlViewModel
@@ -37,7 +38,7 @@ namespace Sale4.Controllers.API
                 };
             }
 
-            return GetJsonResult(new {data = staticHtml});
+            return JsonSuccess(staticHtml);
         }
 
         /// <summary>
@@ -63,7 +64,8 @@ namespace Sale4.Controllers.API
                 StartTime = s.StartTime.ToString("yyyy年MM月dd日"),
                 EndTime = s.EndTime.ToString("yyyy年MM月dd日")
             }).ToList();
-            return GetJsonResult(new { data = statics });
+
+            return JsonSuccess(statics);
         }
 
         public JsonResult GetStaticsPage(int pageSize, int index)
@@ -91,25 +93,31 @@ namespace Sale4.Controllers.API
                     }
                     ).ToList();
                 page.List = page.List.OrderBy(e => e.ExpiresState).ToList();
-                page.Count = page.Count;
+                page.Count = page.List.Count;
             }
-            return GetJsonResult(new {data = page.List, pageCount = page.PageCount, allCount = page.Count});
+
+            return JsonSuccess(new { data = page.List, pageCount = page.PageCount, allCount = page.Count });
         }
 
         public JsonResult DeleteStatics(string id)
         {
+            var staticid = Guid.Empty;
+            var now = DateTime.Now;
+            Guid.TryParse(id,out staticid);
             var result = 0;
-            if (!string.IsNullOrWhiteSpace(id) && new Guid(id)!=Guid.Empty)
+            if (!string.IsNullOrWhiteSpace(id) && staticid != Guid.Empty)
             {
-                var staticHtml = new Fct_StaticHtml()
+                var staticHtml = BaseConnection.QueryFirst(new Fct_StaticHtml()
                 {
-                    StaticHtmlId = new Guid(id),
-                    Disabled = 1
-                };
+                    StaticHtmlId = new Guid(id)
+                });
+                staticHtml.Disabled = 1;
+                staticHtml.REC_ModifyBy = UserSession;
+                staticHtml.REC_ModifyTime = now;
                 result = BaseConnection.Update(staticHtml);
             }
             //Log.LogManager.WriteAppWork("DeleteStaticsDetail", string.Format("用户名：{0} Ip:{1} id:{2}", base.UserName, IPUtil.GetIPAddr(), id));
-            return Json(new { data = result }, JsonRequestBehavior.AllowGet);
+            return JsonSuccess(result);
         }
 
         public JsonResult DeleteStaticsDetail(string id)
@@ -126,7 +134,7 @@ namespace Sale4.Controllers.API
                 result = BaseConnection.Update(staticDetail);
             }
             //Log.LogManager.WriteAppWork("DeleteStaticsDetail", string.Format("用户名：{0} Ip:{1} id:{2}", base.UserName, IPUtil.GetIPAddr(), id));
-            return Json(new { data = result }, JsonRequestBehavior.AllowGet);
+            return JsonSuccess(result);
         }
 
         public JsonResult GetStaticsDetails(string id)
@@ -154,7 +162,7 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
                     REC_ModifyBy = m.REC_ModifyBy,
                 }));
             }
-            return GetJsonResult(new { data = details });
+            return JsonSuccess(details);
         }
 
         public JsonResult GetStaticsDetail(string id)
@@ -186,7 +194,7 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
                     };
                 }
             }
-            return GetJsonResult(new { data = detail });
+            return JsonSuccess(detail);
         }
 
         public JsonResult SaveStaticsHtml(StaticHtmlViewModel html)
@@ -194,25 +202,26 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
             var result = 0;
             var now = DateTime.Now;
             var userName = base.UserSession ?? "";
+            var htmlId = html.StaticHtmlId == Guid.Empty ? Guid.NewGuid() : html.StaticHtmlId;
             #region  validate
             if (html == null)
             {
-                return GetJsonResult(new { data = 0 ,msg="保存失败"});
+                return JsonFail();
             }
             if (html.IsAutoDisabled == 1)
             {
                 if (string.IsNullOrWhiteSpace(html.StartTime) || string.IsNullOrWhiteSpace(html.EndTime) || Convert.ToDateTime(html.EndTime) <= Convert.ToDateTime(html.StartTime))
                 {
-                return GetJsonResult(new { data = 0 ,msg="结束时间不能小于开始时间或者为空"});
+                    return JsonFail("结束时间不能小于开始时间或者为空");
                 }
             }
             if (string.IsNullOrWhiteSpace(html.HtmlCode))
             {
-                return GetJsonResult(new { data = 0 ,msg="编号不能为空"});
+                return JsonFail("编号不能为空");
             }
             if (string.IsNullOrWhiteSpace(html.HtmlName))
             {
-                return GetJsonResult(new { data = 0 ,msg="名称不能为空"});
+                return JsonFail("名称不能为空");
             }
             #endregion
 
@@ -239,7 +248,7 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
             {
                 var m = new Fct_StaticHtml()
                 {
-                    StaticHtmlId = Guid.NewGuid(),
+                    StaticHtmlId = htmlId,
                     HtmlCode = GetNewActCode(),
                     htmlName = html.HtmlName,
                     StartTime = Convert.ToDateTime(html.StartTime),
@@ -260,11 +269,11 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
             }
             if (result > 0)
             {
-                return GetJsonResult(new { data = 1});
+                return JsonSuccess(htmlId);
             }
             //add log
 
-            return GetJsonResult(new { data = 0, msg = "保存失败" });
+            return JsonFail();
         }
 
 

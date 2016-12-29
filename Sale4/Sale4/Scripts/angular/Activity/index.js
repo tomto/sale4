@@ -20,11 +20,13 @@ mainApp.controller("indexCtrl", function ($scope, activityService) {
             $scope.norepeat = false;
             $scope.pageData.Index = 1;
             $scope.pageData.pageSize = 20;
-            activityService.GetStaticsPage($scope.pageData.pageSize , $scope.pageData.Index, function (result) {
-                $scope.fmStaticHtml = result.data;
-                $scope.pageData.pageCount = result.pageCount;
-                $scope.pageData.allCount = result.allCount;
-                $scope.norepeat = true;
+            activityService.GetStaticsPage($scope.pageData.pageSize, $scope.pageData.Index, function (result) {
+                if (result.IsSuccess) {
+                    $scope.fmStaticHtml = result.Data.data;
+                    $scope.pageData.pageCount = result.Data.pageCount;
+                    $scope.pageData.allCount = result.Data.allCount;
+                    $scope.norepeat = true;
+                }
             });
         };
     };
@@ -48,7 +50,7 @@ mainApp.controller("indexCtrl", function ($scope, activityService) {
                 $scope.norepeat = false;
                 activityService.DeleteStatics(staticHtmlId, function (result) {
                     $scope.norepeat = true;
-                    if (result.data > 0) {
+                    if (result.IsSuccess) {
                         $scope.initIndex();
                     } else {
                         $.messager.alert("删除失败!");

@@ -30,10 +30,7 @@ namespace Sale4.Controllers
             {
                 call = SignIn(user);
             }
-
-
-            return GetJsonResult(new { data = call });
-
+            return JsonSuccess(call);
         }
 
         /// <summary>
@@ -67,7 +64,7 @@ namespace Sale4.Controllers
         private JsonResult SignOut()
         {
             Session["UserSession"] = null;
-            return GetJsonResult(new { data = "/Home" });
+            return JsonSuccess("/Home");
         }
     }
 }

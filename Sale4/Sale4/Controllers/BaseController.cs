@@ -1,9 +1,10 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
+using Sale4.Controllers.Common;
 
 namespace Sale4.Controllers
 {
-    public class BaseController : Controller
+    public class BaseController : AjaxRequest 
     {
         public bool IsLogin
         {
@@ -18,10 +19,6 @@ namespace Sale4.Controllers
             }
         }
 
-        public JsonResult GetJsonResult(object data)
-        {
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
         
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {

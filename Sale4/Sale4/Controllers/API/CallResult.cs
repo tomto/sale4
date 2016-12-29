@@ -4,7 +4,6 @@ namespace Sale4.Controllers.API
 {
     public class CallResult
     {
-        public string VMsg { get; set; }
         public string BMsg { get; set; }
         public bool State { get; set; }
         public int Tag { get; set; }
