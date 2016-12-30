@@ -23,6 +23,7 @@ namespace Sale4.Controllers.API
             if (htmlId == Guid.Empty)
             {
                 staticHtml.HtmlCode = GetNewActCode();
+                staticHtml.IsAutoDisabled = 1;
                 staticHtml.StartTime = now.ToString("yyyy年MM月dd日");
                 staticHtml.EndTime = now.ToString("yyyy年MM月dd日");
             }
