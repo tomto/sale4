@@ -25,12 +25,20 @@ namespace Sale4.Controllers
 
         public JsonResult Login(User user)
         {
-            var call = new CallResult();
+            var call = new CallResult()
+            {
+                State = false
+            };
             if (!string.IsNullOrWhiteSpace(user.UserName) && !string.IsNullOrWhiteSpace(user.Password))
             {
                 call = SignIn(user);
             }
-            return JsonSuccess(call);
+            if (call.State)
+            {
+                return JsonSuccess(call);
+            }
+            
+            return JsonFail(call.BMsg);
         }
 
         /// <summary>
@@ -64,7 +72,7 @@ namespace Sale4.Controllers
         private JsonResult SignOut()
         {
             Session["UserSession"] = null;
-            return JsonSuccess("/Home");
+            return JsonSuccess("/Home/Index");
         }
     }
 }

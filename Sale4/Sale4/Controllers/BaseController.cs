@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 using Sale4.Controllers.Common;
+using Utility.Ajax;
 
 namespace Sale4.Controllers
 {
@@ -15,7 +16,7 @@ namespace Sale4.Controllers
         {
             get
             {
-                return Session["UserSession"] == null ? "hujue" : Session["UserSession"].ToString();
+                return Session["UserSession"] == null ? "" : Session["UserSession"].ToString();
             }
         }
 

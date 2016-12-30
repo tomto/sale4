@@ -48,6 +48,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -111,11 +115,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -127,9 +126,6 @@
     <Compile Include="Controllers\API\Models\Fct_StaticHtml.cs" />
     <Compile Include="Controllers\API\UploadController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\Common\Ajax\AjaxData.cs" />
-    <Compile Include="Controllers\Common\Ajax\AjaxRequest.cs" />
-    <Compile Include="Controllers\Common\ConvertDtHelper.cs" />
     <Compile Include="Controllers\Common\SaleCommon.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -144,6 +140,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\activity.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\UploadFile\WebUploader\Uploader.swf" />
     <Content Include="Content\UploadFile\WebUploader\webuploader.css" />
     <Content Include="Content\UploadFile\WebUploader\webuploader.js" />
@@ -156,9 +154,13 @@
     <Content Include="images\sort_desc_disabled.png" />
     <Content Include="Moudle\ProCode.html" />
     <Content Include="Moudle\PromSlice.html" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\plugins\datetimepicker\bootstrap-datetimepicker.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\cmxform.css" />
     <Content Include="Content\dataTables.bootstrap.css" />
     <Content Include="Content\dataTables.responsive.css" />
@@ -182,8 +184,6 @@
     <Content Include="Scripts\angular\Moudle\angular.hjcanvas.js" />
     <Content Include="Scripts\angular\Moudle\angular.tagsinput.js" />
     <Content Include="Scripts\angular\Moudle\angular.textcanvas.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="fonts\glyphicons\flat-ui-icons-regular.eot" />
     <Content Include="fonts\glyphicons\flat-ui-icons-regular.svg" />
     <Content Include="fonts\glyphicons\flat-ui-icons-regular.ttf" />
@@ -216,14 +216,13 @@
     <Content Include="App_Data\codesmith_template\BllCs.cst" />
     <Content Include="App_Data\codesmith_template\CreateAll.cst" />
     <Content Include="App_Data\codesmith_template\ModelCs.cst" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Scripts\dataTables.bootstrap.min.js" />
     <Content Include="Scripts\flat-ui.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\Model\ActivtiyModel.js" />
@@ -255,7 +254,9 @@
     <Content Include="Scripts\sb-admin-2.js" />
     <Content Include="Scripts\sidebar.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -269,7 +270,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Activity\BasicInfo.cshtml" />
     <Content Include="Views\Activity\Detail.cshtml" />
     <Content Include="Views\Activity\FloorDetail.cshtml" />
@@ -281,12 +281,14 @@
     <Folder Include="Views\Upload\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utility\Utility.csproj">
+      <Project>{6f8a5605-063a-4929-afd3-bfbdf22369cc}</Project>
+      <Name>Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

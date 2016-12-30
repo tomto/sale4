@@ -1,6 +1,8 @@
 ﻿
 var saleService = saleService || {};
 
+saleService.noRepeat = true;
+
 saleService.initService = function (name) {
     var service = angular.module(name, []);
     return service;
@@ -8,35 +10,38 @@ saleService.initService = function (name) {
 
 
 saleService.then = function ($http, url, data, call, faid) {
-    return $http({
-        method: 'POST',
-        url: url,
-        data: data,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        cache: false
-    }).success(function(respdata, status, headers, config) {
-        if (headers("seesion") == "timeout") {
-            toLogion();
-        }
-        else if (status == 200) {
-            call(respdata);
-        } else {
-            if (typeof faid === "function") {
-                faid();
-            } else {
-                toLogion();
+    if (saleService.noRepeat) {
+        saleService.noRepeat = false;
+        return $http({
+            method: 'POST',
+            url: url,
+            data: data,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            cache: false
+        }).success(function (respdata, status, headers, config) {
+            if (headers("seesion") == "timeout") {
+                AjaxClient.toLogion();
             }
-        }
-    }).error(function (respdata, status, headers, config) {
-        toLogion();
-    });
+            else if (status == 200) {
+                if (respdata.IsSuccess) call(respdata.Data);
+                else $.messager.alert(respdata.Message || "操作失败!");
+            } else {
+                if (typeof faid === "function") {
+                    faid();
+                } else {
+                    AjaxClient.toLogion();
+                }
+            }
+            saleService.noRepeat = true;
+        }).error(function (respdata, status, headers, config) {
+            AjaxClient.toLogion();
+            saleService.noRepeat = true;
+        });
+    }
 };
 
-function toLogion() {
-    window.location.href = "Home";
-}
 
 
 /*

@@ -28,7 +28,6 @@ mainApp.config(["$routeProvider",
   }]);
 
 mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService) {
-    $scope.norepeat = true;
     $scope.floorsData = [];
     $scope.fmStaticHtml = new fmModel.fmStaticHtml();
     $scope.StaticHtmlId = $routeParams.id || "";
@@ -36,36 +35,24 @@ mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService
 
     $scope.initFloors = function() {
         activityService.GetStaticsDetails($scope.StaticHtmlId, function (result) {
-            $scope.floorsData = result.data;
+            $scope.floorsData = result;
         });
     };
 
-    $scope.initDetail = function () {
-        if ($scope.norepeat && $scope.StaticHtmlId != "") {
-            $scope.norepeat = false;
-            activityService.GetDetail($scope.StaticHtmlId, function (result) {
-                $scope.fmStaticHtml = result.Data;
-                $scope.norepeat = true;
-            });
-            $scope.initFloors();
-        }
+    $scope.initDetail = function() {
+        activityService.GetDetail($scope.StaticHtmlId, function(result) {
+            $scope.fmStaticHtml = result;
+        });
+        $scope.initFloors();
     };
     $scope.initDetail();
 
 
     $scope.delFloor = function (id) {
         $.messager.confirm("Delete", "是否删除!", function () {
-            if ($scope.norepeat) {
-                $scope.norepeat = false;
-                activityService.DeleteStaticsDetail(id, function (result) {
-                    $scope.norepeat = true;
-                    if (result.IsSuccess) {
-                        $scope.initFloors();
-                    } else {
-                        $.messager.alert("删除失败!");
-                    }
-                });
-            }
+            activityService.DeleteStaticsDetail(id, function(result) {
+                $scope.initFloors();
+            });
         });
     };
 
@@ -83,18 +70,10 @@ mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService
             return false;
         }
         $.messager.confirm("Save", "是否保存修改!", function() {
-            if ($scope.norepeat) {
-                $scope.norepeat = false;
-                activityService.SaveStaticsHtml($scope.fmStaticHtml, function(result) {
-                    $scope.norepeat = true;
-                    if (result.IsSuccess) {
-                        $.messager.alert("保存成功!");
-                        window.location.href = window.location.href + "/" + result.data;
-                    } else {
-                        $.messager.alert(result.msg);
-                    }
-                });
-            }
+            activityService.SaveStaticsHtml($scope.fmStaticHtml, function(result) {
+                $.messager.alert("保存成功!");
+                window.location.href = window.location.href + "/" + result.data;
+            });
         });
     };
 });
@@ -104,7 +83,6 @@ mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService
 
 
 mainApp.controller("floorCtrl", function ($scope, $routeParams, activityService) {
-    $scope.norepeat = true;
     $scope.StaticHtmlId = $routeParams.id || "";
     $scope.StaticDetailId = $routeParams.floorid || "";
     $scope.fmStaticDetail = new fmModel.fmStaticDetail();
@@ -113,13 +91,9 @@ mainApp.controller("floorCtrl", function ($scope, $routeParams, activityService)
 
 
     $scope.initFloor = function() {
-        if ($scope.norepeat && $scope.StaticDetailId != "") {
-            $scope.norepeat = false;
-            activityService.GetStaticsDetail($scope.StaticDetailId, function (result) {
-                    $scope.fmStaticDetail = result.data;
-                $scope.norepeat = true;
-            });
-        };
+        activityService.GetStaticsDetail($scope.StaticDetailId, function(result) {
+            $scope.fmStaticDetail = result.data;
+        });
     };
     $scope.initFloor();
     $scope.SelectDetailType = function (type) {
@@ -188,7 +162,6 @@ mainApp.controller("floorCtrl", function ($scope, $routeParams, activityService)
 
     $scope.submitFloor = function() {
         $.messager.confirm("Save", "是否保存修改!", function () {
-            if ($scope.norepeat) {
                 var result = true, anchor = [];
                 if ($scope.fmStaticDetail.Name === "") {
                     $.messager.alert("名称不能为空!");
@@ -231,17 +204,15 @@ mainApp.controller("floorCtrl", function ($scope, $routeParams, activityService)
                         $scope.fmStaticDetail.LucencyAnchor = anchor.join("||");
                     }
                 }
-                $scope.norepeat = false;
-                activityService.SaveStaticsDetail($scope.fmStaticDetail, function (result) {
-                    $scope.norepeat = true;
-                    if (result.IsSuccess) {
-                        $.messager.alert("保存成功!");
-                        window.location.href = "actDetail#/Edit/" + $scope.fmStaticDetail.StaticHtmlId;
-                    } else {
-                        $.messager.alert(result.msg);
-                    }
-                });
-            }
+
+            activityService.SaveStaticsDetail($scope.fmStaticDetail, function(result) {
+                if (result.IsSuccess) {
+                    $.messager.alert("保存成功!");
+                    window.location.href = "actDetail#/Edit/" + $scope.fmStaticDetail.StaticHtmlId;
+                } else {
+                    $.messager.alert(result.msg);
+                }
+            });
         });
     };
 

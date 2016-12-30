@@ -7,6 +7,7 @@ using DapperExtensions;
 using Sale4.Controllers.API.Models;
 using Sale4.Controllers.Common;
 using Sale4.Models;
+using Utility.Extensions;
 
 namespace Sale4.Controllers.API
 {
@@ -16,56 +17,40 @@ namespace Sale4.Controllers.API
         public JsonResult GetDetail(string id)
         {
             var staticHtml = new StaticHtmlViewModel();
-            var firstOrDefault = BaseConnection.QueryFirst(new Fct_StaticHtml { StaticHtmlId = new Guid(id) });
-            //var firstOrDefault = GetStatics(id).FirstOrDefault();
-            if (firstOrDefault != null && firstOrDefault.StaticHtmlId != Guid.Empty)
+            var now = DateTime.Now;
+            var htmlId = id.ToGuid();
+
+            if (htmlId == Guid.Empty)
             {
-                staticHtml = new StaticHtmlViewModel
+                staticHtml.HtmlCode = GetNewActCode();
+                staticHtml.StartTime = now.ToString("yyyy年MM月dd日");
+                staticHtml.EndTime = now.ToString("yyyy年MM月dd日");
+            }
+            else
+            {
+                var firstOrDefault = BaseConnection.QueryFirst(new Fct_StaticHtml { StaticHtmlId = htmlId });
+                if (firstOrDefault != null && firstOrDefault.StaticHtmlId != Guid.Empty)
                 {
-                    StaticHtmlId = firstOrDefault.StaticHtmlId,
-                    HtmlCode = firstOrDefault.HtmlCode,
-                    HtmlUrl = firstOrDefault.htmlUrl,
-                    HtmlName = firstOrDefault.htmlName,
-                    HtmlBannerUrl = firstOrDefault.HtmlBannerUrl,
-                    HtmlAnimateUrl = firstOrDefault.HtmlAnimateUrl,
-                    HtmlBackgroundUrl = firstOrDefault.HtmlBackgroundUrl,
-                    HtmlType = firstOrDefault.HtmlType,
-                    REC_CreateTime = firstOrDefault.REC_CreateTime.ToString("yyyy年MM月dd日"),
-                    REC_CreateBy = firstOrDefault.REC_CreateBy,
-                    REC_ModifyBy = firstOrDefault.REC_ModifyBy,
-                    StartTime = firstOrDefault.StartTime.ToString("yyyy年MM月dd日"),
-                    EndTime = firstOrDefault.EndTime.ToString("yyyy年MM月dd日")
-                };
+                    staticHtml = new StaticHtmlViewModel
+                    {
+                        StaticHtmlId = firstOrDefault.StaticHtmlId,
+                        HtmlCode = firstOrDefault.HtmlCode,
+                        HtmlUrl = firstOrDefault.htmlUrl,
+                        HtmlName = firstOrDefault.htmlName,
+                        HtmlBannerUrl = firstOrDefault.HtmlBannerUrl,
+                        HtmlAnimateUrl = firstOrDefault.HtmlAnimateUrl,
+                        HtmlBackgroundUrl = firstOrDefault.HtmlBackgroundUrl,
+                        HtmlType = firstOrDefault.HtmlType,
+                        REC_CreateTime = firstOrDefault.REC_CreateTime.ToString("yyyy年MM月dd日"),
+                        REC_CreateBy = firstOrDefault.REC_CreateBy,
+                        REC_ModifyBy = firstOrDefault.REC_ModifyBy,
+                        StartTime = firstOrDefault.StartTime.ToString("yyyy年MM月dd日"),
+                        EndTime = firstOrDefault.EndTime.ToString("yyyy年MM月dd日")
+                    };
+                }
             }
 
             return JsonSuccess(staticHtml);
-        }
-
-        /// <summary>
-        /// 获取静态活动列表
-        /// </summary>
-        /// <returns></returns>
-        public JsonResult GetDetails()
-        {
-            var staticHtml = GetStatics();
-            var statics = staticHtml.Select(s => new StaticHtmlViewModel()
-            {
-                StaticHtmlId = s.StaticHtmlId,
-                HtmlCode = s.HtmlCode,
-                HtmlUrl = s.htmlUrl,
-                HtmlName = s.htmlName,
-                HtmlBannerUrl = s.HtmlBannerUrl,
-                HtmlAnimateUrl = s.HtmlAnimateUrl,
-                HtmlBackgroundUrl = s.HtmlBackgroundUrl,
-                HtmlType = s.HtmlType,
-                REC_CreateTime = s.REC_CreateTime.ToString("yyyy年MM月dd日"),
-                REC_CreateBy = s.REC_CreateBy,
-                REC_ModifyBy = s.REC_ModifyBy,
-                StartTime = s.StartTime.ToString("yyyy年MM月dd日"),
-                EndTime = s.EndTime.ToString("yyyy年MM月dd日")
-            }).ToList();
-
-            return JsonSuccess(statics);
         }
 
         public JsonResult GetStaticsPage(int pageSize, int index)
@@ -462,7 +447,7 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
             var result = string.Empty;
             var now = DateTime.Now;
             var sql = @"SELECT COUNT(1) FROM Fct_StaticHtml WHERE Disabled = 0 AND Fct_StaticHtml.REC_CreateTime >= '{0}' AND Fct_StaticHtml.REC_CreateTime < '{1}'";
-            var num = BaseConnection.Query<Fct_StaticHtml>(string.Format(sql, now.ToString("yyyy-M-d 00:00:00"), now.ToString("yyyy-M-d 23:59:59")));
+            var num = BaseConnection.Scalar<int>(string.Format(sql, now.ToString("yyyy-M-d 00:00:00"), now.ToString("yyyy-M-d 23:59:59")));
             result = now.ToString("yyyyMMdd") + num;
             return result;
         }

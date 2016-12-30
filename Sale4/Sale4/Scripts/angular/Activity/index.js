@@ -6,7 +6,6 @@ var mainApp = angular.module("mainApp", ["ngRoute", "activityService"]);
 
 
 mainApp.controller("indexCtrl", function ($scope, activityService) {
-    $scope.norepeat = true;
     $scope.fmStaticHtml = new fmModel.fmStaticHtml();
     $scope.pageData = {
         pageSize: 20,
@@ -15,60 +14,39 @@ mainApp.controller("indexCtrl", function ($scope, activityService) {
         allCount: 0
     };
 
-    $scope.initIndex = function () {
-        if ($scope.norepeat) {
-            $scope.norepeat = false;
-            $scope.pageData.Index = 1;
-            $scope.pageData.pageSize = 20;
-            activityService.GetStaticsPage($scope.pageData.pageSize, $scope.pageData.Index, function (result) {
-                if (result.IsSuccess) {
-                    $scope.fmStaticHtml = result.Data.data;
-                    $scope.pageData.pageCount = result.Data.pageCount;
-                    $scope.pageData.allCount = result.Data.allCount;
-                    $scope.norepeat = true;
-                }
-            });
-        };
+    $scope.initIndex = function() {
+        $scope.pageData.Index = 1;
+        $scope.pageData.pageSize = 20;
+        activityService.GetStaticsPage($scope.pageData.pageSize, $scope.pageData.Index, function(result) {
+            $scope.fmStaticHtml = result.data;
+            $scope.pageData.pageCount = result.pageCount;
+            $scope.pageData.allCount = result.allCount;
+        });
     };
 
-    $scope.applyIndex = function () {
-        if ($scope.norepeat && $scope.pageData.Index < $scope.pageData.pageCount) {
-            $scope.norepeat = false;
-            $scope.pageData.Index++;
-            activityService.GetStaticsPage($scope.pageData.pageSize, $scope.pageData.Index, function (result) {
-                $scope.fmStaticHtml = $scope.fmStaticHtml.concat(result.data);
-                $scope.norepeat = true;
-            });
-        };
+    $scope.applyIndex = function() {
+        $scope.pageData.Index++;
+        activityService.GetStaticsPage($scope.pageData.pageSize, $scope.pageData.Index, function(result) {
+            $scope.fmStaticHtml = $scope.fmStaticHtml.concat(result.data);
+        });
     };
 
     $scope.initIndex();
 
     $scope.del = function(staticHtmlId) {
         $.messager.confirm("Delete", "是否删除!", function() {
-            if ($scope.norepeat && staticHtmlId != "") {
-                $scope.norepeat = false;
-                activityService.DeleteStatics(staticHtmlId, function (result) {
-                    $scope.norepeat = true;
-                    if (result.IsSuccess) {
-                        $scope.initIndex();
-                    } else {
-                        $.messager.alert("删除失败!");
-                    }
-                });
-            };
+            activityService.DeleteStatics(staticHtmlId, function(result) {
+                $scope.initIndex();
+            });
         });
     };
 
     $scope.copy = function (htmlCode) {
         $.messager.confirm("Copy", "是否复制!", function() {
-            if ($scope.norepeat && htmlCode != "") {
-                $scope.norepeat = false;
-                activityService.CopyHtml(htmlCode, function (result) {
-                    $scope.norepeat = true;
-                    $scope.initIndex();
-                });
-            };
+            activityService.CopyHtml(htmlCode, function(result) {
+                $scope.norepeat = true;
+                $scope.initIndex();
+            });
         });
     };
 

@@ -15,6 +15,11 @@ namespace Sale4
 
 
             routes.MapRoute(
+                "Login",
+                "Login",
+                new { action = "Index", controller = "Home", id = UrlParameter.Optional }
+            );
+            routes.MapRoute(
                 "actIndex",
                 "actIndex",
                 new { action = "Index", controller = "Activity", id = UrlParameter.Optional }
