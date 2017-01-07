@@ -62,17 +62,15 @@ mainApp.controller("detailCtrl", function ($scope, $routeParams, activityService
     
 
     $scope.submitDetail = function () {
-        if ($scope.fmStaticHtml.HtmlCode === "") {
-            $.messager.alert("编号不能为空!");
-            return false;
-        } else if ($scope.fmStaticHtml.HtmlName === "") {
+        if ($scope.fmStaticHtml.HtmlName === "") {
             $.messager.alert("名称不能为空!");
             return false;
         }
         $.messager.confirm("Save", "是否保存修改!", function() {
             activityService.SaveStaticsHtml($scope.fmStaticHtml, function(result) {
                 $.messager.alert("保存成功!");
-                window.location.href = window.location.href + "/" + result.data;
+                $scope.initDetail();
+                //window.location.href = window.location.href + "/" + result.data;
             });
         });
     };

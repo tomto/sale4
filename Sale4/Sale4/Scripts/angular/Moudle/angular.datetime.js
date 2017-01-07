@@ -44,11 +44,11 @@ angular.module("datetimepicker", []).directive("datetimepicker", function () {
 
             scope.init = function() {
                 if (time === "" || time === undefined) {
-                    time = scope.dateformat("yyyy-mm-dd", now);
+                    time = scope.dateformat("yyyy-mm-dd 00:00:00", now);
                 }
                 $(".form_datetime").datetimepicker({
                     language: 'zh-CN',
-                    format: 'yyyy-mm-dd hh:ii',
+                    format: 'yyyy-mm-dd hh:mm:ss',
                     autoclose: true,
                     showMeridian: true,
                     todayBtn: true,

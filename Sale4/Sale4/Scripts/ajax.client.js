@@ -21,6 +21,7 @@ AjaxClient.async = function (url, requestType, args, callback) {
             async: true,
             type: requestType
         }).done(function (r, s, p) {
+            AjaxClient.noRepeat = true;
             if (p.getResponseHeader("seesion") == "timeout") {
                 AjaxClient.toLogion();
             } else {
@@ -30,10 +31,9 @@ AjaxClient.async = function (url, requestType, args, callback) {
                     $.messager.alert(r.Message || "操作失败!");
                 }
             }
-            AjaxClient.noRepeat = true;
         }).fail(function (xhr, text, error) {
-            console.log(text);
             AjaxClient.noRepeat = true;
+            console.log(text);
         });
     }
 };
@@ -60,5 +60,10 @@ AjaxClient.sync = function (url, requestType, args) {
 
 AjaxClient.toLogion = function() {
     window.location.href = "/Login";
+};
+
+AjaxClient.reload = function (urlparam) {
+    var url = window.location.href;
+    window.location.href = url + (urlparam || "");
 };
 AjaxClient.noRepeat = true;

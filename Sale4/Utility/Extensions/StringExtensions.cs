@@ -78,7 +78,8 @@ namespace Utility.Extensions
 
         public static DateTime ToDatetime(this string str)
         {
-            return Convert.ToDateTime(str);
+            var result = DateTime.MinValue;
+            return DateTime.TryParse(str, out result) ? result : DateTime.Now;
         }
 
         public static bool IsInt64(this string str)

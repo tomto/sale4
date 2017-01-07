@@ -21,6 +21,7 @@ saleService.then = function ($http, url, data, call, faid) {
             },
             cache: false
         }).success(function (respdata, status, headers, config) {
+            saleService.noRepeat = true;
             if (headers("seesion") == "timeout") {
                 AjaxClient.toLogion();
             }
@@ -34,10 +35,9 @@ saleService.then = function ($http, url, data, call, faid) {
                     AjaxClient.toLogion();
                 }
             }
-            saleService.noRepeat = true;
         }).error(function (respdata, status, headers, config) {
-            AjaxClient.toLogion();
             saleService.noRepeat = true;
+            console.log(respdata);
         });
     }
 };

@@ -1,26 +1,14 @@
 ﻿using System.Web.Mvc;
 using Sale4.Controllers.API;
+using Utility.Ajax;
 
 namespace Sale4.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController : AjaxRequest
     {
-        
-
         public ActionResult Index()
         {
-            if (IsLogin)
-            {
-                Response.Redirect("/actindex");
-            }
-
             return View();
-        }
-
-        public class User
-        {
-            public string UserName { get; set; }
-            public string Password { get; set; }
         }
 
         public JsonResult Login(User user)
@@ -74,5 +62,12 @@ namespace Sale4.Controllers
             Session["UserSession"] = null;
             return JsonSuccess("/Home/Index");
         }
+    }
+
+
+    public class User
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
     }
 }

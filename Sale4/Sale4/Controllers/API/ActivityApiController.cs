@@ -22,10 +22,10 @@ namespace Sale4.Controllers.API
 
             if (htmlId == Guid.Empty)
             {
-                staticHtml.HtmlCode = GetNewActCode();
+                staticHtml.HtmlCode = "";
                 staticHtml.IsAutoDisabled = 1;
-                staticHtml.StartTime = now.ToString("yyyy年MM月dd日");
-                staticHtml.EndTime = now.ToString("yyyy年MM月dd日");
+                staticHtml.StartTime = now.ToString("yyyy-MM-dd hh:mm:ss");
+                staticHtml.EndTime = now.AddDays(1).ToString("yyyy-MM-dd hh:mm:ss");
             }
             else
             {
@@ -37,16 +37,17 @@ namespace Sale4.Controllers.API
                         StaticHtmlId = firstOrDefault.StaticHtmlId,
                         HtmlCode = firstOrDefault.HtmlCode,
                         HtmlUrl = firstOrDefault.htmlUrl,
+                        IsAutoDisabled = firstOrDefault.IsAutoDisabled,
                         HtmlName = firstOrDefault.htmlName,
                         HtmlBannerUrl = firstOrDefault.HtmlBannerUrl,
                         HtmlAnimateUrl = firstOrDefault.HtmlAnimateUrl,
                         HtmlBackgroundUrl = firstOrDefault.HtmlBackgroundUrl,
                         HtmlType = firstOrDefault.HtmlType,
-                        REC_CreateTime = firstOrDefault.REC_CreateTime.ToString("yyyy年MM月dd日"),
+                        REC_CreateTime = firstOrDefault.REC_CreateTime.ToString("yyyy-MM-dd hh:mm:ss"),
                         REC_CreateBy = firstOrDefault.REC_CreateBy,
                         REC_ModifyBy = firstOrDefault.REC_ModifyBy,
-                        StartTime = firstOrDefault.StartTime.ToString("yyyy年MM月dd日"),
-                        EndTime = firstOrDefault.EndTime.ToString("yyyy年MM月dd日")
+                        StartTime = firstOrDefault.StartTime.ToString("yyyy-MM-dd hh:mm:ss"),
+                        EndTime = firstOrDefault.EndTime.ToString("yyyy-MM-dd hh:mm:ss"),
                     };
                 }
             }
@@ -71,6 +72,7 @@ namespace Sale4.Controllers.API
                         StaticHtmlId = r.StaticHtmlId,
                         HtmlCode = r.HtmlCode,
                         HtmlName = r.htmlName,
+                        IsAutoDisabled = r.IsAutoDisabled,
                         EndTime = r.EndTime.ToString("yyyy年MM月dd日"),
                         StartTime = r.StartTime.ToString("yyyy年MM月dd日"),
                         REC_CreateBy = r.REC_CreateBy,
@@ -78,7 +80,7 @@ namespace Sale4.Controllers.API
                         REC_CreateTime = r.REC_CreateTime.ToString("yyyy年MM月dd日")
                     }
                     ).ToList();
-                page.List = page.List.OrderBy(e => e.ExpiresState).ToList();
+                page.List = page.List.OrderByDescending(e => e.REC_CreateTime).ThenBy(e => e.ExpiresState).ToList();
                 page.Count = page.List.Count;
             }
 
@@ -87,15 +89,15 @@ namespace Sale4.Controllers.API
 
         public JsonResult DeleteStatics(string id)
         {
-            var staticid = Guid.Empty;
+            var staticid = id.ToGuid();
             var now = DateTime.Now;
-            Guid.TryParse(id,out staticid);
+            
             var result = 0;
-            if (!string.IsNullOrWhiteSpace(id) && staticid != Guid.Empty)
+            if (staticid != Guid.Empty)
             {
                 var staticHtml = BaseConnection.QueryFirst(new Fct_StaticHtml()
                 {
-                    StaticHtmlId = new Guid(id)
+                    StaticHtmlId = staticid
                 });
                 staticHtml.Disabled = 1;
                 staticHtml.REC_ModifyBy = UserSession;
@@ -187,7 +189,6 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
         {
             var result = 0;
             var now = DateTime.Now;
-            var userName = base.UserSession ?? "";
             var htmlId = html.StaticHtmlId == Guid.Empty ? Guid.NewGuid() : html.StaticHtmlId;
             #region  validate
             if (html == null)
@@ -196,14 +197,10 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
             }
             if (html.IsAutoDisabled == 1)
             {
-                if (string.IsNullOrWhiteSpace(html.StartTime) || string.IsNullOrWhiteSpace(html.EndTime) || Convert.ToDateTime(html.EndTime) <= Convert.ToDateTime(html.StartTime))
+                if (string.IsNullOrWhiteSpace(html.StartTime) || string.IsNullOrWhiteSpace(html.EndTime) || html.EndTime.ToDatetime() <= html.StartTime.ToDatetime())
                 {
                     return JsonFail("结束时间不能小于开始时间或者为空");
                 }
-            }
-            if (string.IsNullOrWhiteSpace(html.HtmlCode))
-            {
-                return JsonFail("编号不能为空");
             }
             if (string.IsNullOrWhiteSpace(html.HtmlName))
             {
@@ -218,14 +215,14 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
                     StaticHtmlId = html.StaticHtmlId
                 });
                 m.htmlName = html.HtmlName;
-                m.StartTime = Convert.ToDateTime(html.StartTime);
-                m.EndTime = Convert.ToDateTime(html.EndTime);
+                m.StartTime = html.StartTime.ToDatetime();
+                m.EndTime = html.EndTime.ToDatetime();
                 m.HtmlAnimateUrl = html.HtmlAnimateUrl;
                 m.htmlUrl = html.HtmlUrl;
                 m.HtmlBackgroundUrl = html.HtmlBackgroundUrl;
                 m.HtmlBannerUrl = html.HtmlBannerUrl;
                 m.IsAutoDisabled = html.IsAutoDisabled;
-                m.REC_ModifyBy = userName;
+                m.REC_ModifyBy = base.UserSession;
                 m.REC_ModifyTime = now;
                 result = BaseConnection.Update(m);
                 
@@ -237,8 +234,8 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
                     StaticHtmlId = htmlId,
                     HtmlCode = GetNewActCode(),
                     htmlName = html.HtmlName,
-                    StartTime = Convert.ToDateTime(html.StartTime),
-                    EndTime = Convert.ToDateTime(html.EndTime),
+                    StartTime = html.StartTime.ToDatetime(),
+                    EndTime = html.EndTime.ToDatetime(),
                     HtmlAnimateUrl = html.HtmlAnimateUrl,
                     htmlUrl = html.HtmlUrl,
                     HtmlType = 1,
@@ -246,9 +243,9 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
                     HtmlBackgroundUrl = html.HtmlBackgroundUrl,
                     HtmlBannerUrl = html.HtmlBannerUrl,
                     IsAutoDisabled = html.IsAutoDisabled,
-                    REC_ModifyBy = userName,
+                    REC_ModifyBy = base.UserSession,
                     REC_ModifyTime = now,
-                    REC_CreateBy = userName,
+                    REC_CreateBy = base.UserSession,
                     REC_CreateTime = now
                 };
                 result = BaseConnection.Insert(m);

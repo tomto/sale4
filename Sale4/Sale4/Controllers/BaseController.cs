@@ -26,10 +26,12 @@ namespace Sale4.Controllers
             if (string.IsNullOrWhiteSpace(UserSession))
             {
                 filterContext.HttpContext.Response.Headers.Add("seesion", "timeout");
+                filterContext.HttpContext.Response.Redirect("/Login");
+                
                 //filterContext.HttpContext.Response.End();
+//                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "Index" }));
             }
-
-            //filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "Index" }));
+            
         }
     }
 

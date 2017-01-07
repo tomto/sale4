@@ -44,7 +44,6 @@ mainApp.controller("indexCtrl", function ($scope, activityService) {
     $scope.copy = function (htmlCode) {
         $.messager.confirm("Copy", "是否复制!", function() {
             activityService.CopyHtml(htmlCode, function(result) {
-                $scope.norepeat = true;
                 $scope.initIndex();
             });
         });
