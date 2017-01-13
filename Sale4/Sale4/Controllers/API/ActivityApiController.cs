@@ -283,7 +283,6 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
         //        detail.REC_ModifyBy = base.UserName == null ? "" : base.UserName.ToString();
         //    }
 
-
         //    #region  validate
 
         //    if (string.IsNullOrWhiteSpace(detail.Name))
