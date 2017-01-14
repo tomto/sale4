@@ -90,7 +90,7 @@ mainApp.controller("floorCtrl", function ($scope, $routeParams, activityService)
 
     $scope.initFloor = function() {
         activityService.GetStaticsDetail($scope.StaticDetailId, function(result) {
-            $scope.fmStaticDetail = result.data;
+            $scope.fmStaticDetail = result;
         });
     };
     $scope.initFloor();

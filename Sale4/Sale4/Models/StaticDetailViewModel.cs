@@ -20,7 +20,7 @@ namespace Sale4.Models
         public string REC_CreateBy { get; set; }
         public string REC_ModifyBy { get; set; }
 
-        public List<YgwCommodity> Commodities { get; set; }
+        public List<Commodity> Commodities { get; set; }
 
     }
 }

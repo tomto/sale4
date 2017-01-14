@@ -20,10 +20,17 @@ namespace Sale4.Controllers.API
             {
                 try
                 {
+                    string extendName = Path.GetExtension(files[0].FileName);
+                    string[] extendsName = { ".xls", ".doc", ".csv", ".docx", ".xlsx", ".rar", ".jpg", ".jpeg", ".png", ".ppt", ".pptx", ".pdf" };
+                    if (!extendsName.Contains(extendName))
+                    {
+                        return JsonFail("文件格式不正确");
+                    }
+
                     var name = Guid.NewGuid() + DateTime.Now.ToString("yyyyMMdd");
-                    var file = this.Server.MapPath("~/Content/UploadFile/images/" + name);
+                    var file = this.Server.MapPath("~/Content/UploadFile/images/" + name + extendName);
                     files[0].SaveAs(file);
-                    return JsonResult(1,file + "上传成功", SaleCommon.ImgUrl + name);
+                    return JsonResult(1, "上传成功", SaleCommon.ImgUrl + name + extendName);
                 }
                 catch (Exception ex)
                 {

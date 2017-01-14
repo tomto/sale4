@@ -4,9 +4,9 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Linq.Expressions;
 using Dapper;
 using DapperExtensions;
-using Sale4.Controllers.API.Models;
 
 namespace Sale4.Controllers.API
 {
@@ -20,8 +20,10 @@ namespace Sale4.Controllers.API
             {
                 _connString = "Data Source=172.17.1.106;Initial Catalog=Efruit_CN_SH;User ID=ygtest;Password=ygtest";
             }            
+            
             SqlConnection conn = new SqlConnection(_connString);
             conn.Open();
+
            return conn;
         }
 
@@ -44,7 +46,7 @@ namespace Sale4.Controllers.API
                 return conn.Query<T>(sql).ToList();
             }
         }
-
+        
         public static T QueryFirst<T>(string sql)
         {
             IDbConnection conn;
@@ -73,7 +75,7 @@ namespace Sale4.Controllers.API
         }
 
         #endregion query
-
+        
         public static int Update<T>(string sql)
         {
             IDbConnection conn;
@@ -101,13 +103,5 @@ namespace Sale4.Controllers.API
             }
         }
 
-        //public int Delete<T>(T model)
-        //{
-        //    IDbConnection conn;
-        //    using (conn = OpenConnection())
-        //    {
-        //        return conn.Execute(model);
-        //    }
-        //}
     }
 }

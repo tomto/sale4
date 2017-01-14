@@ -49,16 +49,15 @@ angular.module("hjupload", []).directive("hjupload", function () {
                     uploader.on('uploadSuccess', function(file, response) {
                         console.log(response);
                         console.log(file);
-                        if (response.state === "SUCCESS") {
+                        if (response.IsSuccess) {
                             if (pickbtn.siblings(".j_uploadval").length > 0) {
-                                pickbtn.siblings(".j_uploadval").val(response.url);
+                                pickbtn.siblings(".j_uploadval").val(response.Data);
                                 pickbtn.siblings(".j_uploadval").keyup();
                             }
                             //pickbtn.siblings(".j_uploadval").val(response.url);
                             //pickbtn.siblings(".j_fileList").find("img").attr("src", response.url);
-                        } else {
-                            $.messager.alert("上传出错!");
                         }
+                        $.messager.alert(response.Message);
                     });
                     uploader.on('uploadError', function(file) {
                         $.messager.alert("上传出错!");

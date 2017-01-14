@@ -20,7 +20,6 @@ namespace Sale4.Models
         public string REC_ModifyBy { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
-        public int RoleCode { get; set; }
         /// <summary>
         /// 1:过期活动自动下架
         /// 0:不适用自动过期

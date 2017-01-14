@@ -7,6 +7,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sale;
 using Sale.Controllers;
 using Sale4.Controllers;
+using Sale4.Controllers.API;
+using Sale4.Controllers.API.Models;
+using Utility.Extensions;
 
 
 namespace Sale.Tests.Controllers

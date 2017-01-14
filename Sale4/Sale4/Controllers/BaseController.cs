@@ -16,7 +16,7 @@ namespace Sale4.Controllers
         {
             get
             {
-                return Session["UserSession"] == null ? "" : Session["UserSession"].ToString();
+                return Session["UserSession"] == null ? "hujue" : Session["UserSession"].ToString();
             }
         }
 

@@ -260,63 +260,77 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
         }
 
 
-        //public JsonResult SaveStaticsDetail(YgwStaticDetail detail)
-        //{
-        //    var isSuccess = "0";
+        public JsonResult SaveStaticsDetail(StaticDetailViewModel detail)
+        {
+            var result = 0;
+            var now = DateTime.Now;
+            #region  validate
+            if (detail == null || detail.StaticHtmlId == Guid.Empty)
+            {
+                return JsonFail();
+            }
+            else if (string.IsNullOrWhiteSpace(detail.Name))
+            {
+                return JsonFail("名称不能为空");
+            }
 
-        //    if (detail == null)
-        //    {
-        //        return Json(new { data = isSuccess }, JsonRequestBehavior.AllowGet);
-        //    }
+            #endregion
+            //to do 优惠券
+            //if (detail.DetailType == (int)EDetailType.Html)
+            //{
+            //    var checkCoupon = CheckCoupon(detail, roleCode);
+            //    if (!checkCoupon.State)
+            //    {
+            //        return Json(new { data = isSuccess, msg = checkCoupon.BMsg }, JsonRequestBehavior.AllowGet);
+            //    }
+            //}
+            if (detail.StaticDetailId == Guid.Empty)
+            {
+                var m = new Fct_StaticDetail()
+                {
+                    StaticHtmlId = detail.StaticHtmlId,
+                    StaticDetailId = Guid.NewGuid(),
+                    Title = detail.Title,
+                    Name = detail.Name,
+                    HtmlBackgroundUrl = detail.HtmlBackgroundUrl,
+                    CommodityCodes = detail.CommodityCodes,
+                    LucencyAnchor = detail.LucencyAnchor,
+                    Tag = detail.Tag,
+                    DetailType =  detail.DetailType,
+                    Sort = detail.Sort,
 
-        //    var roleCode = base.UserSession.User.EmployeeType;
-        //    if (roleCode == ERoleCode.None)
-        //    {
-        //        return Json(new { data = isSuccess }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    if (string.IsNullOrWhiteSpace(detail.StaticDetailId))
-        //    {
-        //        detail.REC_CreateBy = base.UserName == null ? "" : base.UserName.ToString();
-        //    }
-        //    else
-        //    {
-        //        detail.REC_ModifyBy = base.UserName == null ? "" : base.UserName.ToString();
-        //    }
+                    Disabled = 0,
+                    REC_ModifyBy = base.UserSession,
+                    REC_ModifyTime = now,
+                    REC_CreateBy = base.UserSession,
+                    REC_CreateTime = now
+                };
+                result = BaseConnection.Insert(m);
+            }
+            else
+            {
+                var m = BaseConnection.QueryFirst(new Fct_StaticDetail
+                {
+                    StaticDetailId = detail.StaticDetailId
+                });
+                m.Title = detail.Title;
+                m.Name = detail.Name;
+                m.HtmlBackgroundUrl = detail.HtmlBackgroundUrl;
+                m.CommodityCodes = detail.CommodityCodes;
+                m.LucencyAnchor = detail.LucencyAnchor;
+                m.Tag = detail.Tag;
+                m.DetailType = detail.DetailType;
+                m.Sort = detail.Sort;
+                m.REC_ModifyBy = base.UserSession;
+                m.REC_ModifyTime = now;
 
-        //    #region  validate
+                result = BaseConnection.Update(m);
+            }
 
-        //    if (string.IsNullOrWhiteSpace(detail.Name))
-        //    {
-        //        return Json(new { data = "5" }, JsonRequestBehavior.AllowGet);
-        //    }
+          //  YGOP.ESB.Log.LogManager.WriteAppWork("SaveStaticsDetail", string.Format("用户名：{0} Ip:{1} detail.StaticHtmlId:{2}", base.UserName, IPUtil.GetIPAddr(), detail.StaticHtmlId));
+            return result > 0 ? JsonSuccess() : JsonFail();
 
-        //    #endregion
-
-        //    if (!string.IsNullOrWhiteSpace(detail.StaticHtmlId))
-        //    {
-        //        if (string.IsNullOrWhiteSpace(detail.StaticDetailId))
-        //        {
-        //            detail.StaticDetailId = Guid.NewGuid().ToString();
-        //        }
-        //        if (detail.DetailType == (int)EDetailType.Html)
-        //        {
-        //            var checkCoupon = CheckCoupon(detail, roleCode);
-        //            if (!checkCoupon.State)
-        //            {
-        //                return Json(new { data = isSuccess, msg = checkCoupon.BMsg }, JsonRequestBehavior.AllowGet);
-        //            }
-        //        }
-
-        //        var result = _activityServer.SaveHtmlDetail(detail);
-        //        if (result.State && result.ResultObj != null)
-        //        {
-        //            isSuccess = result.ResultObj.ToString();
-        //        }
-        //    }
-        //    YGOP.ESB.Log.LogManager.WriteAppWork("SaveStaticsDetail", string.Format("用户名：{0} Ip:{1} detail.StaticHtmlId:{2}", base.UserName, IPUtil.GetIPAddr(), detail.StaticHtmlId));
-        //    return Json(new { data = isSuccess }, JsonRequestBehavior.AllowGet);
-
-        //}
+        }
 
         //public JsonResult CopyHtml(string code)
         //{
@@ -332,6 +346,83 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
         //    return Json(new { data = isSuccess }, JsonRequestBehavior.AllowGet);
         //}
 
+
+        #region pre
+        /// <summary>
+        /// 获取活动页面详情ByCode
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public PreActivityViewModel GetActivityBaseByCode(string code)
+        {
+            var activity = new PreActivityViewModel();
+
+            try
+            {
+                var statichtml = new Fct_StaticHtml()
+                {
+                    HtmlCode = code,
+                    Disabled = 0
+                };
+                if (!string.IsNullOrWhiteSpace(code))
+                {
+                    activity.FctStaticHtml = BaseConnection.QueryFirst(statichtml);
+                }
+                if (activity.FctStaticHtml != null && activity.FctStaticHtml.StaticHtmlId != Guid.Empty)
+                {
+                    var sql = @"SELECT * FROM Fct_StaticDetail WHERE Disabled = @Disabled AND StaticHtmlId =@StaticHtmlId ORDER BY sort DESC";
+                    activity.FctStaticDetails = BaseConnection.Query<Fct_StaticDetail>(sql, new Fct_StaticDetail()
+                    {
+                        StaticHtmlId = statichtml.StaticHtmlId,
+                        Disabled = 0
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                //YGOP.ESB.Log.LogManager.WriteAppError(code, ex);
+            }
+
+            return activity;
+        }
+        /// <summary>
+        /// 获取活动商品ByCode
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public PreActivityViewModel GetActivityCommodity(string code)
+        {
+            var activity = new PreActivityViewModel();
+
+            try
+            {
+                var statichtml = new Fct_StaticHtml()
+                {
+                    HtmlCode = code,
+                    Disabled = 0
+                };
+                if (!string.IsNullOrWhiteSpace(code))
+                {
+                    activity.FctStaticHtml = BaseConnection.QueryFirst(statichtml);
+                }
+                if (activity.FctStaticHtml != null && activity.FctStaticHtml.StaticHtmlId != Guid.Empty)
+                {
+                    var sql = @"SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlId AND DetailType IN ({0},{1},{2}) ORDER BY sort DESC";
+                    activity.FctStaticDetails = BaseConnection.Query<Fct_StaticDetail>(string.Format(sql,(int)EDetailType.List4,(int)EDetailType.List2,(int)EDetailType.List3),new Fct_StaticDetail()
+                    {
+                        StaticHtmlId = statichtml.StaticHtmlId,
+                        Disabled = 0
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                //YGOP.ESB.Log.LogManager.WriteAppError(code, ex);
+            }
+
+            return activity;
+        }
+        #endregion
 
         #region addCoupon
 
@@ -396,38 +487,18 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
 
         #region 预览
 
-        //public ActionResult PreActivity(string id)
-        //{
-        //    var statics = new YgwStaticHtml();
-        //    if (!string.IsNullOrWhiteSpace(id))
-        //    {
-        //        //html
-        //        var result = _activityServer.GetStaticsByCode(id);
-        //        if (result.State && result.ResultObj != null)
-        //        {
-        //            statics = result.ResultObj as YgwStaticHtml;
-        //        }
-        //    }
+        public ActionResult PreActivity(string code)
+        {
+            var activity = new PreActivityViewModel();
+            if (!string.IsNullOrWhiteSpace(code))
+            {
+                //html
+                activity = GetActivityBaseByCode(code);
+            }
 
-        //    //商品详情
-        //    if (statics.Details != null && statics.Details.Any())
-        //    {
-        //        var commodityService = new CommodityService();
-        //        foreach (var s in statics.Details)
-        //        {
-        //            if (s.DetailType == (int)EDetailType.List4 || s.DetailType == (int)EDetailType.List2 || s.DetailType == (int)EDetailType.List3)
-        //            {
-        //                var actresult = commodityService.GetActivityCommodities(id + s.Name, s.CommodityCodes, AreaCodeHelper.GetUserAreaCode().ToString(), YGWB.Web.Common.WebCommon.GetAreaId(), true);//上海
-        //                if (actresult != null && actresult.State)
-        //                {
-        //                    s.Commodities = actresult.ResultObj as List<YgwCommodity>;
-        //                }
-        //            }
-        //        }
-        //    }
 
-        //    return View(statics);
-        //}
+            return View(activity);
+        }
 
 
 
@@ -436,13 +507,14 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
 
 
         /// <summary>
-        /// get act code
+        /// get act code by createtime
         /// </summary>
         /// <returns></returns>
         public string GetNewActCode()
         {
             var result = string.Empty;
             var now = DateTime.Now;
+
             var sql = @"SELECT COUNT(1) FROM Fct_StaticHtml WHERE Disabled = 0 AND Fct_StaticHtml.REC_CreateTime >= '{0}' AND Fct_StaticHtml.REC_CreateTime < '{1}'";
             var num = BaseConnection.Scalar<int>(string.Format(sql, now.ToString("yyyy-M-d 00:00:00"), now.ToString("yyyy-M-d 23:59:59")));
             result = now.ToString("yyyyMMdd") + num;
@@ -467,6 +539,7 @@ FROM dbo.Fct_StaticHtml WHERE Fct_StaticHtml.Disabled = 0
     SELECT COUNT(1) FROM dbo.Fct_StaticHtml WHERE Fct_StaticHtml.Disabled = 0";
             page.List = BaseConnection.Query<Fct_StaticHtml>(string.Format(sql, start, end));
             page.Count = BaseConnection.Scalar<int>(sqlcount);
+            
             return page;
         }
         private List<Fct_StaticHtml> GetStatics(string id = "")
