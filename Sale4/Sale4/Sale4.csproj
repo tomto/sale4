@@ -279,7 +279,7 @@
     <Content Include="Views\Activity\FloorDetail.cshtml" />
     <Content Include="Views\Activity\FloorList.cshtml" />
     <Content Include="Views\Activity\Index.cshtml" />
-    <Content Include="Views\Shared\_PreLayout.cshtml" />
+    <Content Include="Views\Activity\PreActivity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\UploadFile\file\" />

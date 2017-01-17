@@ -25,7 +25,7 @@ namespace Sale4.Controllers.API
                 staticHtml.HtmlCode = "";
                 staticHtml.IsAutoDisabled = 1;
                 staticHtml.StartTime = now.ToString("yyyy-MM-dd hh:mm:ss");
-                staticHtml.EndTime = now.AddDays(1).ToString("yyyy-MM-dd hh:mm:ss");
+                staticHtml.EndTime = now.AddDays(1).ToString("yyyy-MM-dd hh:mm:ss");                
             }
             else
             {
@@ -499,7 +499,6 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
 
             return View(activity);
         }
-
 
 
         #endregion 预览
