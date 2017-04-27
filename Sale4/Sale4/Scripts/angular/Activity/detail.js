@@ -203,13 +203,8 @@ mainApp.controller("floorCtrl", function ($scope, $routeParams, activityService)
                     }
                 }
 
-            activityService.SaveStaticsDetail($scope.fmStaticDetail, function(result) {
-                if (result.IsSuccess) {
-                    $.messager.alert("保存成功!");
-                    window.location.href = "actDetail#/Edit/" + $scope.fmStaticDetail.StaticHtmlId;
-                } else {
-                    $.messager.alert(result.msg);
-                }
+            activityService.SaveStaticsDetail($scope.fmStaticDetail, function() {
+                window.location.href = "actDetail#/Edit/" + $scope.fmStaticDetail.StaticHtmlId;
             });
         });
     };

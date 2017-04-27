@@ -257,6 +257,8 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sb-admin-2.js" />
     <Content Include="Scripts\sidebar.js" />
+    <Content Include="Scripts\vue\preActivity\activity.js" />
+    <Content Include="Scripts\vue\vue.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

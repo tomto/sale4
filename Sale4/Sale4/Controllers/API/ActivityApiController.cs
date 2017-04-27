@@ -502,7 +502,9 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
 
 
         #endregion 预览
+        
 
+        #region private
 
 
         /// <summary>
@@ -520,7 +522,6 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
             return result;
         }
 
-        #region private
         private PageResult<Fct_StaticHtml> GetBasePage(int pageSize, int index)
         {
             var page = new PageResult<Fct_StaticHtml>();
