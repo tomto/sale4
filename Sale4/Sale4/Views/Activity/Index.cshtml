@@ -7,11 +7,27 @@
 
 <div class="row" ng-app="mainApp" ng-controller="indexCtrl">
     <div class="j_navbar-wrapper">
-        <div class="col-md-12">
+        @*<div class="col-md-12">
             <span class="alert-success" role="alert">未开始</span>
             <span class="alert-info" role="alert">进行中</span>
             <span class="alert-warning" role="alert">已结束</span>
             <span class="bg-primary">总记录条数:<span ng-bind="pageData.allCount"></span></span>
+        </div>*@
+        <div class="row">
+            <div class="col-lg-6">
+                <span class="alert-success" role="alert">未开始</span>
+                <span class="alert-info" role="alert">进行中</span>
+                <span class="alert-warning" role="alert">已结束</span>
+                <span class="bg-primary">总记录条数:<span ng-bind="pageData.allCount"></span></span>
+                <div class="form-group">
+                    <div class="input-group input-group-hg input-group-rounded">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn"><span class="fui-search"></span></button>
+                        </span>
+                        <input class="form-control focus" placeholder="Search" ng-model="pageData.search" type="text">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <table class="table table-hover table-condensed">

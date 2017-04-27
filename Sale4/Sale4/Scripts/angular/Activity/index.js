@@ -5,9 +5,11 @@
 var mainApp = angular.module("mainApp", ["ngRoute", "activityService"]);
 
 
-mainApp.controller("indexCtrl", function ($scope, activityService) {
+mainApp.controller("indexCtrl", function ($scope, $timeout, activityService) {
     $scope.fmStaticHtml = new fmModel.fmStaticHtml();
+    var timeout = '';
     $scope.pageData = {
+        search: "",
         pageSize: 20,
         Index: 1,
         pageCount: 0,
@@ -17,7 +19,26 @@ mainApp.controller("indexCtrl", function ($scope, activityService) {
     $scope.initIndex = function() {
         $scope.pageData.Index = 1;
         $scope.pageData.pageSize = 20;
-        activityService.GetStaticsPage($scope.pageData.pageSize, $scope.pageData.Index, function(result) {
+        activityService.GetStaticsPage($scope.pageData.search,$scope.pageData.pageSize, $scope.pageData.Index, function (result) {
+            $scope.fmStaticHtml = result.data;
+            $scope.pageData.pageCount = result.pageCount;
+            $scope.pageData.allCount = result.allCount;
+        });
+    };
+
+    $scope.$watch('pageData.search', function (newVal, oldVal) {
+        if (newVal !== oldVal) {
+            if (timeout) $timeout.cancel(timeout);
+            timeout = $timeout(function () {
+                $scope.searchIndex();
+            }, 1000);
+        }
+    }, true);
+
+    $scope.searchIndex = function () {
+        $scope.pageData.Index = 1;
+        $scope.pageData.pageSize = 20;
+        activityService.GetStaticsPage($scope.pageData.search, $scope.pageData.pageSize, $scope.pageData.Index, function (result) {
             $scope.fmStaticHtml = result.data;
             $scope.pageData.pageCount = result.pageCount;
             $scope.pageData.allCount = result.allCount;
@@ -26,7 +47,7 @@ mainApp.controller("indexCtrl", function ($scope, activityService) {
 
     $scope.applyIndex = function() {
         $scope.pageData.Index++;
-        activityService.GetStaticsPage($scope.pageData.pageSize, $scope.pageData.Index, function(result) {
+        activityService.GetStaticsPage($scope.pageData.search,$scope.pageData.pageSize, $scope.pageData.Index, function (result) {
             $scope.fmStaticHtml = $scope.fmStaticHtml.concat(result.data);
         });
     };

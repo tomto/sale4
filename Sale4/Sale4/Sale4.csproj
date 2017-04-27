@@ -146,6 +146,7 @@
     <Content Include="Content\activity.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
     <Content Include="Content\UploadFile\images\icon2222.png" />
     <Content Include="Content\UploadFile\WebUploader\Uploader.swf" />
     <Content Include="Content\UploadFile\WebUploader\webuploader.css" />
@@ -162,10 +163,13 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\business\index.js" />
     <Content Include="Scripts\common\common.js" />
     <Content Include="Scripts\common\commoninit.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\plugins\datetimepicker\bootstrap-datetimepicker.min.css" />
@@ -244,6 +248,7 @@
     <Content Include="Scripts\plugins\index_animate\app.js" />
     <Content Include="Scripts\plugins\index_animate\particles.js" />
     <Content Include="Scripts\plugins\index_animate\particles_style.css" />
+    <Content Include="Scripts\plugins\jquery.bootstrap\jquery.bootstrap.js" />
     <Content Include="Scripts\plugins\jquery.bootstrap\jquery.bootstrap.min.js" />
     <Content Include="Scripts\plugins\metismenu\metisMenu.min.css" />
     <Content Include="Scripts\plugins\metismenu\metisMenu.min.js" />

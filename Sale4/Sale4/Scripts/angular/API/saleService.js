@@ -84,10 +84,11 @@ activityService.factory("activityService", ['$http', function ($http) {
         saleService.then($http, $q, "/ActivityApi/GetDetails","", "", call, faid);
     };
     
-    factory.GetStaticsPage = function (pagesize,index, call, faid) {
+    factory.GetStaticsPage = function (search,pagesize, index, call, faid) {
         var page = {
             pageSize: pagesize,
-            index: index
+            index: index,
+            searchKey: search
         };
         saleService.then($http, "/ActivityApi/GetStaticsPage", "", page, call, faid);
     };

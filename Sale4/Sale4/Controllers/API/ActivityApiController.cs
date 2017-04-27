@@ -55,7 +55,7 @@ namespace Sale4.Controllers.API
             return JsonSuccess(staticHtml);
         }
 
-        public JsonResult GetStaticsPage(int pageSize, int index)
+        public JsonResult GetStaticsPage(int pageSize, int index, string searchKey = "")
         {
             var page = new PageResult<StaticHtmlViewModel>()
             {
@@ -63,7 +63,7 @@ namespace Sale4.Controllers.API
                 List = new List<StaticHtmlViewModel>()
             };
 
-            var result = GetBasePage(pageSize, index);
+            var result = GetBasePage(pageSize, index, searchKey);
             if (result != null && result.Count > 0)
             {
                 page.List = (from r in result.List
@@ -522,7 +522,7 @@ SELECT * FROM Fct_StaticDetail WHERE Disabled = 0 AND StaticHtmlId =@StaticHtmlI
             return result;
         }
 
-        private PageResult<Fct_StaticHtml> GetBasePage(int pageSize, int index)
+        private PageResult<Fct_StaticHtml> GetBasePage(int pageSize, int index, string fuzzy)
         {
             var page = new PageResult<Fct_StaticHtml>();
             index = index < 0 ? 0 : index;
@@ -533,12 +533,19 @@ WITH LIST as
   (
     SELECT ROW_NUMBER() OVER(ORDER BY Fct_StaticHtml.Rec_CreateTime DESC) AS ROWNUM,
                           Fct_StaticHtml.*                   
-FROM dbo.Fct_StaticHtml WHERE Fct_StaticHtml.Disabled = 0
+FROM dbo.Fct_StaticHtml WHERE Fct_StaticHtml.Disabled = 0 {2}
   )  SELECT * FROM LIST WHERE ROWNUM BETWEEN {0} AND {1}";
             var sqlcount = @"
-    SELECT COUNT(1) FROM dbo.Fct_StaticHtml WHERE Fct_StaticHtml.Disabled = 0";
-            page.List = BaseConnection.Query<Fct_StaticHtml>(string.Format(sql, start, end));
-            page.Count = BaseConnection.Scalar<int>(sqlcount);
+    SELECT COUNT(1) FROM dbo.Fct_StaticHtml WHERE Fct_StaticHtml.Disabled = 0  {0} ";
+            var wheresql = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(fuzzy))
+            {
+                wheresql += @" AND Fct_StaticHtml.HtmlCode LIKE '%"+fuzzy+"%'";
+            }
+
+            page.List = BaseConnection.Query<Fct_StaticHtml>(string.Format(sql, start, end, wheresql));
+            page.Count = BaseConnection.Scalar<int>(string.Format(sqlcount, wheresql));
             
             return page;
         }

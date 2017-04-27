@@ -18,7 +18,7 @@ namespace Sale4.Controllers.API
         {
             if (string.IsNullOrEmpty(_connString))
             {
-                _connString = "Data Source=172.17.1.106;Initial Catalog=Efruit_CN_SH;User ID=ygtest;Password=ygtest";
+                _connString = "Data Source=172.17.7.106;Initial Catalog=Efruit_CN_SH;User ID=ygtest;Password=ygtest";
             }            
             
             SqlConnection conn = new SqlConnection(_connString);
